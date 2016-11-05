@@ -1,0 +1,30 @@
+{
+    "name":        "KazuakiM/bardiche",
+    "type":        "library",
+    "description": "FTP, FTPS, SFTP and SCP clients",
+    "keywords":    [
+        "ftp",
+        "ftps",
+        "sftp",
+        "scp",
+        "clients"
+    ],
+    "homepage": "https://github.com/KazuakiM/bardiche",
+    "license":  "MIT",
+    "authors":  [{
+        "name":     "KazuakiM",
+        "email":    "kazuaki_mabuchi_to_go@hotmail.co.jp",
+        "homepage": "https://github.com/KazuakiM"
+    }],
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "KazuakiM\\Bardiche\\": "src/"
+        }
+    }
+}
