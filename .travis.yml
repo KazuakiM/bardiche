@@ -1,0 +1,36 @@
+language: php
+
+php:
+  - 7.1
+
+before_install:
+  - sudo apt-get install proftpd
+  - echo pass |
+    ftpasswd --file /tmp/ftpd.passwd --passwd --name fate --uid $(id -u) -gid $(id -g) --home /tmp/ftp --shell /bin/sh --stdin
+  - ftpasswd --file /tmp/ftpd.group --group --name rynith --gid $(id -g)
+  - mkdir /tmp/ftp
+  - sudo chown $(id -u).$(id -g) /tmp/ftp
+  - |+
+    echo "
+      DefaultAddress 127.0.0.1
+      Port 10021
+      AuthUserFile /tmp/ftpd.passwd
+      AuthGroupFile /tmp/ftpd.group
+      AuthOrder mod_auth_file.c
+      DefaultRoot ~
+      ListOptions -a
+    " > /tmp/proftpd.conf
+  - cat /tmp/proftpd.conf
+  - sudo /usr/sbin/proftpd -c /tmp/proftpd.conf -S 127.0.0.1
+  - sudo netstat -ln
+
+before_script:
+  - composer install --no-progress --no-ansi --no-interaction --profile
+
+script:
+  - composer test
+
+notifications:
+  email: false
+
+# vim:fdl=0:sts=2:sw=2:ts=2
