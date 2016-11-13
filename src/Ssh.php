@@ -18,13 +18,7 @@ trait Ssh
     public function initSsh() : void //{{{
     {
         //Connection
-        if (empty($this->config['method']) && empty($this->config['callbacks'])) {
-            $this->_connection = @ssh2_connect($this->config['host'], $this->config['port']);
-        } elseif (empty($this->config['callbacks'])) {
-            $this->_connection = @ssh2_connect($this->config['host'], $this->config['port'], $this->config['method']);
-        } else {
-            $this->_connection = @ssh2_connect($this->config['host'], $this->config['port'], $this->config['method'], $this->config['callbacks']);
-        }
+        $this->_connection = @ssh2_connect($this->config['host'], $this->config['port'], $this->config['method'], $this->config['callbacks']);
         if ($this->_connection === false) {
             throw new BardicheException(BardicheException::getMessageJson('ssh2_connect error.'));
         }
@@ -39,30 +33,32 @@ trait Ssh
             throw new BardicheException(BardicheException::getMessageJson('ssh2_auth_ error.'));
         }
 
-        if ($this->config['sftp']) {
+        //Sftp
+        if ($this->type === FileClientsType::BARDICHE_TYPE_SFTP) {
             $this->_sftp = ssh2_sftp($this->_connection);
         }
     } //}}}
 
-    public function closeSsh() //{{{
+    public function closeSsh() : void //{{{
     {
         @ssh2_exec($this->_connection, 'exit;');
     } //}}}
 
-    public function uploadSftp() //{{{
+    public function uploadSftp() : void //{{{
     {
         foreach ($this->config['file_info'] as $fileInfoArray) {
-            if (@file_put_contents("ssh2.sftp://{$this->_sftp}" . ltrim(self::getRemoteFilePath($fileInfoArray), '/'), @fopen(self::getUploadLocalFilePath($fileInfoArray), 'r')) === false) {
-                throw new BardicheException(BardicheException::getMessageJson('file_put_contents error.'));
+            if (@file_put_contents("ssh2.sftp://{$this->_sftp}" . self::getRemoteFilePath($fileInfoArray), @fopen(self::getUploadLocalFilePath($fileInfoArray), 'r')) === false) {
+                throw new BardicheException(BardicheException::getMessageJson('file_put_contents or fopen error.'));
             }
+
         }
     } //}}}
 
-    public function downloadSftp() //{{{
+    public function downloadSftp() : void //{{{
     {
         foreach ($this->config['file_info'] as $fileInfoArray) {
-            if (@file_put_contents(self::getDownloadLocalFilePath($fileInfoArray), @fopen("ssh2.sftp://{$this->_sftp}" . ltrim(self::getRemoteFilePath($fileInfoArray), '/'), 'r'), LOCK_EX) === false) {
-                throw new BardicheException(BardicheException::getMessageJson('file_put_contents or foepn error.'));
+            if (@file_put_contents(self::getDownloadLocalFilePath($fileInfoArray), @fopen("ssh2.sftp://{$this->_sftp}" . self::getRemoteFilePath($fileInfoArray), 'r'), LOCK_EX) === false) {
+                throw new BardicheException(BardicheException::getMessageJson('file_put_contents or fopen error.'));
             }
         }
     } //}}}

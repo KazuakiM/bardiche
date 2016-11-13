@@ -20,7 +20,6 @@ before_install:
       DefaultRoot ~
       ListOptions -a
     " > /tmp/proftpd.conf
-  - cat /tmp/proftpd.conf
   - sudo /usr/sbin/proftpd -c /tmp/proftpd.conf -S 127.0.0.1
   - sudo netstat -ln
 
