@@ -5,7 +5,7 @@ bardiche
 [![](https://img.shields.io/github/issues/KazuakiM/bardiche.svg)](https://github.com/KazuakiM/bardiche/issues)
 [![](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-FTP:zap: and SCP:snowflake: clients:jack_o_lantern::sparkles:
+FTP:zap:, FTPS:snowman:, SFTP:sunny: and SCP:snowflake: clients:jack_o_lantern::sparkles:
 
 ##Usage
 
@@ -17,63 +17,29 @@ One time connection by FTP.
 
 try {
     FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), [
-        'negotiation' => false,
-        'timeout'     => 90,
-        'host'        => '',
-        'username'    => '',
-        'password'    => '',
+        'negotiation' => true,                             // options default: fallse
+        'timeout'     => 90,                               // options default: 90
+        'host'        => '192.168.1.1',
+        'username'    => 'vagrant',
+        'password'    => 'vagrant',
         'file_info'   => [
             [
-                'remote_directory_path' => '',
-                'remote_file_name'      => '',
-                'local_directory_path'  => '',
-                'local_file_name'       => '',
+                'remote_directory_path' => '/',
+                'remote_file_name'      => 'fate_t_harlaown.txt',
+                'local_directory_path'  => '/tmp',
+                'local_file_name'       => 'fate_testarossa.txt',
             ],
+            //[
+            //    'remote_directory_path' => '/takamachi',
+            //    'remote_file_name'      => 'fate_t_harlaown.txt',
+            //    'local_directory_path'  => '/tmp',
+            //    'local_file_name'       => 'fate_testarossa.txt',
+            //],
         ],
-        'port'  => 21,
-        'pasv'  => true,
-        'ascii' => true,
-        'ssl'   => false,
+        'port'  => 2224,                                   // options default: 21
+        'pasv'  => false,                                  // options default: true
+        'ascii' => true,                                   // options default: true
     ], FileClients::BARDICHE_UPLOAD);
-} catch ( BardicheException $e ) {
-    var_dump(json_decode($e->getMessage(), true));
-}
-```
-
-Serial update many file by FTP.
-```php
-<?php
-
-try {
-    $clients = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), [
-        'negotiation' => false,
-        'timeout'     => 90,
-        'host'        => '',
-        'username'    => '',
-        'password'    => '',
-        'file_info'   => [
-            [
-                'remote_directory_path' => '',
-                'remote_file_name'      => '',
-                'local_directory_path'  => '',
-                'local_file_name'       => '',
-            ],
-        ],
-        'port'  => 21,
-        'pasv'  => true,
-        'ascii' => true,
-        'ssl'   => false,
-    ]);
-
-    $clients->upload();
-
-    $clients->setOptions([
-        'remote_file_name' => '',
-        'local_file_name'  => '',
-    ]);
-    $clients->upload();
-
-    $clients->__destruct();
 } catch ( BardicheException $e ) {
     var_dump(json_decode($e->getMessage(), true));
 }
@@ -83,8 +49,6 @@ try {
 
 Here is the list of tested features and unsupported features:
 
-* Support FTPS:snowman:
-* Support SFTP:sunny:
 * Retry function
 * Support parallel files (Use [ftp_nb_put()](http://php.net/manual/ja/function.ftp-nb-put.php) and [ftp-nb-get](http://php.net/manual/ja/function.ftp-nb-get.php))
 

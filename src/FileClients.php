@@ -27,9 +27,8 @@ class FileClients //{{{
         BARDICHE_UPLOAD   = true,
         BARDICHE_DOWNLOAD = false;
 
-    public $config;
-
-    private $_type;
+    public
+        $config, $type;
 
     private static
         $_defaultCommonConfig = [
@@ -52,13 +51,11 @@ class FileClients //{{{
                 'port'  => 21,
                 'pasv'  => true,
                 'ascii' => true,
-                'ssl'   => false,
             ],
             'ftps' => [
                 'port'  => 21,
                 'pasv'  => true,
                 'ascii' => true,
-                'ssl'   => true,
             ],
             'sftp' => [
                 'port'        => 22,
@@ -66,7 +63,6 @@ class FileClients //{{{
                 'callbacks'   => [],
                 'pubkeyfile'  => '',
                 'privkeyfile' => '',
-                'sftp'        => true,
             ],
             'scp' => [
                 'port'        => 22,
@@ -75,7 +71,6 @@ class FileClients //{{{
                 'pubkeyfile'  => '',
                 'privkeyfile' => '',
                 'permission'  => 0644,
-                'sftp'        => false,
             ],
         ];
     //}}}
@@ -83,7 +78,7 @@ class FileClients //{{{
     public function __construct(FileClientsType $type, array $config) //{{{
     {
         //Init
-        $this->_type = $type->valueOf();
+        $this->type = $type->valueOf();
         $this->_setConfig($config);
 
         assert(0 < strlen($this->config['host']),    BardicheException::getMessageJson("Not found.config['host']"));
@@ -96,7 +91,7 @@ class FileClients //{{{
         }
 
         //Connection
-        switch ($this->_type) {
+        switch ($this->type) {
         case FileClientsType::BARDICHE_TYPE_FTP:
             $this->initFtp();
             break;
@@ -118,7 +113,7 @@ class FileClients //{{{
 
     public function __destruct() //{{{
     {
-        switch ($this->_type) {
+        switch ($this->type) {
         case FileClientsType::BARDICHE_TYPE_FTP:
         case FileClientsType::BARDICHE_TYPE_FTPS:
             $this->closeFtp();
@@ -136,7 +131,7 @@ class FileClients //{{{
         foreach (self::$_defaultCommonConfig as $commonKey => $commonValue) {
             $this->config[$commonKey] = $config[$commonKey] ?? $commonValue;
         }
-        foreach (self::$_defaultConfig[$this->_type] as $key => $value) {
+        foreach (self::$_defaultConfig[$this->type] as $key => $value) {
             $this->config[$key] = $config[$key] ?? $value;
         }
     } //}}}
@@ -152,7 +147,7 @@ class FileClients //{{{
 
     public function upload() : void //{{{
     {
-        switch ($this->_type) {
+        switch ($this->type) {
         case FileClientsType::BARDICHE_TYPE_FTP:
         case FileClientsType::BARDICHE_TYPE_FTPS:
             $this->uploadFtp();
@@ -168,7 +163,7 @@ class FileClients //{{{
 
     public function download() : void //{{{
     {
-        switch ($this->_type) {
+        switch ($this->type) {
         case FileClientsType::BARDICHE_TYPE_FTP:
         case FileClientsType::BARDICHE_TYPE_FTPS:
             $this->downloadFtp();
@@ -195,7 +190,7 @@ class FileClients //{{{
 
     public function setValue(string $key, $value) : void //{{{
     {
-        assert(array_key_exists($key, self::$_defaultCommonConfig) ? true : array_key_exists($key, self::$_defaultConfig[$this->_type]), BardicheException::getMessageJson("Not found.config['{$value}']"));
+        assert(array_key_exists($key, self::$_defaultCommonConfig) ? true : array_key_exists($key, self::$_defaultConfig[$this->type]), BardicheException::getMessageJson("Not found.config['{$value}']"));
 
         $this->config[$key] = $value;
     } //}}}

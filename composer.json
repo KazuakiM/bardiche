@@ -17,10 +17,13 @@
         "homepage": "https://github.com/KazuakiM"
     }],
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.1"
     },
     "require-dev": {
         "phpunit/phpunit": "5.*"
+    },
+    "scripts": {
+        "test": "phpunit --colors=always"
     },
     "autoload": {
         "psr-4": {

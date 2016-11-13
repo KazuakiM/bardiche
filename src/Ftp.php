@@ -18,7 +18,7 @@ trait Ftp
     public function initFtp() : void //{{{
     {
         //Connection
-        if ($this->config['ssl']) {
+        if ($this->type === FileClientsType::BARDICHE_TYPE_FTPS) {
             $this->_connection = ftp_ssl_connect($this->config['host'], $this->config['port'], $this->config['timeout']);
         } else {
             $this->_connection = ftp_connect($this->config['host'], $this->config['port'], $this->config['timeout']);
