@@ -43,19 +43,20 @@ class FileClients //{{{
                     'remote_file_name'      => '',
                     'local_directory_path'  => '',
                     'local_file_name'       => '',
+                    'ascii'                 => FTP_ASCII, // options: ftp and ftps only.
                 ],
             ],
         ],
         $_defaultConfig = [
             'ftp' => [
-                'port'  => 21,
-                'pasv'  => true,
-                'ascii' => true,
+                'port'     => 21,
+                'pasv'     => true,
+                'parallel' => 0,
             ],
             'ftps' => [
-                'port'  => 21,
-                'pasv'  => true,
-                'ascii' => true,
+                'port'     => 21,
+                'pasv'     => true,
+                'parallel' => 0,
             ],
             'sftp' => [
                 'port'        => 22,
@@ -93,16 +94,10 @@ class FileClients //{{{
         //Connection
         switch ($this->type) {
         case FileClientsType::BARDICHE_TYPE_FTP:
-            $this->initFtp();
-            break;
         case FileClientsType::BARDICHE_TYPE_FTPS:
-            $this->initFtp();
             break;
-        case FileClientsType::BARDICHE_TYPE_SFTP:
-            assert(extension_loaded('ssh2'), BardicheException::getMessageJson('Not found.ssh2'));
 
-            $this->initSsh();
-            break;
+        case FileClientsType::BARDICHE_TYPE_SFTP:
         case FileClientsType::BARDICHE_TYPE_SCP:
             assert(extension_loaded('ssh2'), BardicheException::getMessageJson('Not found.ssh2'));
 
@@ -125,7 +120,7 @@ class FileClients //{{{
         }
     } //}}}
 
-    private function _setConfig(array $config) : void //{{{
+    private function _setConfig(array $config) //{{{
     {
         $this->config = [];
         foreach (self::$_defaultCommonConfig as $commonKey => $commonValue) {
@@ -136,7 +131,7 @@ class FileClients //{{{
         }
     } //}}}
 
-    private function _negotiation() : void //{{{
+    private function _negotiation() //{{{
     {
         $connection = fsockopen($this->config['host'], $this->config['port'], $errno, $errstr, $this->config['timeout']);
         if (!$connection) {
@@ -145,7 +140,7 @@ class FileClients //{{{
         fclose($connection);
     } //}}}
 
-    public function upload() : void //{{{
+    public function upload() //{{{
     {
         switch ($this->type) {
         case FileClientsType::BARDICHE_TYPE_FTP:
@@ -161,7 +156,7 @@ class FileClients //{{{
         }
     } //}}}
 
-    public function download() : void //{{{
+    public function download() //{{{
     {
         switch ($this->type) {
         case FileClientsType::BARDICHE_TYPE_FTP:
@@ -177,7 +172,7 @@ class FileClients //{{{
         }
     } //}}}
 
-    public static function one(FileClientsType $type, array $config, bool $upload) : void //{{{
+    public static function one(FileClientsType $type, array $config, bool $upload) //{{{
     {
         $model = new self($type, $config);
         if ($upload) {
@@ -188,14 +183,14 @@ class FileClients //{{{
         $model->__destruct();
     } //}}}
 
-    public function setValue(string $key, $value) : void //{{{
+    public function setValue(string $key, $value) //{{{
     {
         assert(array_key_exists($key, self::$_defaultCommonConfig) ? true : array_key_exists($key, self::$_defaultConfig[$this->type]), BardicheException::getMessageJson("Not found.config['{$value}']"));
 
         $this->config[$key] = $value;
     } //}}}
 
-    public function setOptions(array $options) : void //{{{
+    public function setOptions(array $options) //{{{
     {
         $this->config += $options;
     } //}}}
