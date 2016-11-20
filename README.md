@@ -28,17 +28,19 @@ try {
                 'remote_file_name'      => 'fate_t_harlaown.txt',
                 'local_directory_path'  => '/tmp',
                 'local_file_name'       => 'fate_testarossa.txt',
+                'ascii'                 => FTP_ASCII,
             ],
             //[
             //    'remote_directory_path' => '/takamachi',
             //    'remote_file_name'      => 'fate_t_harlaown.txt',
             //    'local_directory_path'  => '/tmp',
             //    'local_file_name'       => 'fate_testarossa.txt',
+            //    'ascii'                 => FTP_ASCII,
             //],
         ],
-        'port'  => 2224,                                   // options default: 21
-        'pasv'  => false,                                  // options default: true
-        'ascii' => true,                                   // options default: true
+        'port'     => 2224,                                // options default: 21
+        'pasv'     => false,                               // options default: true
+        'parallel' => 2,                                   // options default: 0
     ], FileClients::BARDICHE_UPLOAD);
 } catch ( BardicheException $e ) {
     var_dump(json_decode($e->getMessage(), true));
@@ -49,8 +51,7 @@ try {
 
 Here is the list of tested features and unsupported features:
 
-* Retry function
-* Support parallel files (Use [ftp_nb_put()](http://php.net/manual/ja/function.ftp-nb-put.php) and [ftp-nb-get](http://php.net/manual/ja/function.ftp-nb-get.php))
+* ssh test case. (very hard mode...)
 
 ##Author
 

@@ -1,32 +1,27 @@
 language: php
 
 php:
-  - 7.1
+  - 7.0
+
+sudo: true
 
 before_install:
-  - sudo apt-get install proftpd
-  - echo pass |
-    ftpasswd --file /tmp/ftpd.passwd --passwd --name fate --uid $(id -u) -gid $(id -g) --home /tmp/ftp --shell /bin/sh --stdin
-  - ftpasswd --file /tmp/ftpd.group --group --name rynith --gid $(id -g)
-  - mkdir /tmp/ftp
-  - sudo chown $(id -u).$(id -g) /tmp/ftp
-  - |+
-    echo "
-      DefaultAddress 127.0.0.1
-      Port 10021
-      AuthUserFile /tmp/ftpd.passwd
-      AuthGroupFile /tmp/ftpd.group
-      AuthOrder mod_auth_file.c
-      DefaultRoot ~
-      ListOptions -a
-    " > /tmp/proftpd.conf
-  - sudo /usr/sbin/proftpd -c /tmp/proftpd.conf -S 127.0.0.1
-  - sudo netstat -ln
+  - phpenv config-rm xdebug.ini
+  - sudo apt-get update  -qq
+  - sudo apt-get install -qq -y libssh2-1-dev libssh2-php openssh-client openssh-server proftpd
+  # ls -l $HOME/.phpenv/versions/$(phpenv version-name)/lib/php/extensions/
+  # extensionspath=`ls -l $HOME/.phpenv/versions/$(phpenv version-name)/lib/php/extensions/|grep no-debug-zts|awk '{print $9}'|tr -d '\n'`
+  # echo $extensionspath
+  # cp tests/bin/ssh2.so $HOME/.phpenv/versions/$(phpenv version-name)/lib/php/extensions/$extensionspath/
+  # echo "extension=ssh2.so" >> $HOME/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
+  - sh tests/before_script.sh
   - composer install --no-progress --no-ansi --no-interaction --profile
 
 script:
+  # php -r "phpinfo();"
+  # cat $HOME/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer test
 
 notifications:
