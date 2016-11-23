@@ -6,8 +6,8 @@ php:
 sudo: true
 
 before_install:
-  - sudo apt-get update  -qq
-  - sudo apt-get install -qq -y libssh2-1-dev libssh2-php openssh-client openssh-server proftpd
+  - sudo apt-get update  -yqq
+  - sudo apt-get install -yqq libssh2-1-dev libssh2-php openssh-client openssh-server proftpd
   # ls -l $HOME/.phpenv/versions/$(phpenv version-name)/lib/php/extensions/
   # extensionspath=`ls -l $HOME/.phpenv/versions/$(phpenv version-name)/lib/php/extensions/|grep no-debug-zts|awk '{print $9}'|tr -d '\n'`
   # echo $extensionspath

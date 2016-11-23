@@ -18,7 +18,7 @@ export SSH_PUBLIC_KEY="$HOME/.ssh/id_rsa.pub"
 mkdir -p /tmp/ftp
 chown $(id -u).$(id -g) /tmp/ftp
 echo pass | ftpasswd --file /tmp/ftpd.passwd --passwd --name fate --uid $(id -u) -gid $(id -g) --home /tmp/ftp --shell /bin/sh --stdin
-ftpasswd --file /tmp/ftpd.group --group --name rynith --gid $(id -g)
+ftpasswd --file /tmp/ftpd.group --group --name nogroup --gid $(id -g)
 cat <<EOS > /tmp/proftpd.conf
 DefaultAddress 127.0.0.1
 Port 10021

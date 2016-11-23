@@ -1,8 +1,6 @@
 <?php
 
-use KazuakiM\Bardiche\BardicheException;
-use KazuakiM\Bardiche\FileClients;
-use KazuakiM\Bardiche\FileClientsType;
+namespace KazuakiM\Bardiche;
 
 /**
  * @copyright KazuakiM <kazuaki_mabuchi_to_go@hotmail.co.jp>
@@ -54,7 +52,7 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
                     'local_file_name'       => 'sample_scp_local.txt',
                 ],
             ],
-            'port'        => 10021,                            // options default: 21
+            'port'        => 21,                               // options default: 21
             'method'      => [],                               // options
             'callbacks'   => [],                               // options
             'pubkeyfile'  => '',                               // options
@@ -89,7 +87,9 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
     } //}}}
 
     /**
-     * @expectedException KazuakiM\Bardiche\BardicheException
+     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedExceptionCode    0
+     * @expectedExceptionMessage {"message":"fsockopen error"}
      */
     public function testNegotiation() //{{{
     {
@@ -98,10 +98,14 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
     } //}}}
 
     /**
-     * @expectedException KazuakiM\Bardiche\BardicheException
+     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedExceptionCode    0
+     * @expectedExceptionMessage {"message":"file_exists error."}
      */
     public function testGetUploadLocalFilePath() //{{{
     {
+        $this->assertTrue(@file_exists('/tmp/sample_ftp_local.txt') ? @unlink('/tmp/sample_ftp_local.txt') : true, BardicheException::getMessageJson('Internal Server Error.unlink'));
+
         $fileClients       = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
         $fileClientsConfig = $fileClients->getConfig();
         foreach ($fileClientsConfig['file_info'] as $fileInfoArray) {
@@ -109,9 +113,43 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
         }
     } //}}}
 
+    /**
+     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedExceptionCode    0
+     * @expectedExceptionMessage {"message":"ftp_connect error."}
+     */
+    public function testAuthConnectionFtp() //{{{
+    {
+        $this->successUploadFtpConfig['negotiation'] = false;
+        $this->successUploadFtpConfig['port']        = '2222';
+        FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig, FileClients::BARDICHE_UPLOAD);
+    } //}}}
+
+    /**
+     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedExceptionCode    0
+     * @expectedExceptionMessage {"message":"ftp_login error."}
+     */
+    public function testAuthLoginFtp() //{{{
+    {
+        $this->successUploadFtpConfig['username'] = 'ng_user';
+        FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig, FileClients::BARDICHE_UPLOAD);
+    } //}}}
+
+    /**
+     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedExceptionCode    0
+     * @expectedExceptionMessage {"message":"ftp_pasv error."}
+     */
+    public function testAuthPasvFtp() //{{{
+    {
+        $this->successUploadFtpConfig['pasv'] = [];
+        FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig, FileClients::BARDICHE_UPLOAD);
+    } //}}}
+
     public function testOneUploadFtp() //{{{
     {
-        $this->assertTrue(touch('/tmp/sample_ftp_local.txt'), BardicheException::getMessageJson('Internal Server Error.touch'));
+        $this->assertTrue(@touch('/tmp/sample_ftp_local.txt'), BardicheException::getMessageJson('Internal Server Error.touch'));
         FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig, FileClients::BARDICHE_UPLOAD);
 
         foreach ($this->successUploadFtpConfig['file_info'] as $fileInfoArray) {
