@@ -6,6 +6,15 @@
       <directory suffix=".php">src/</directory>
     </whitelist>
   </filter>
+
+  <logging>
+    <log type="coverage-clover" target="build/logs/clover.xml"/>
+  </logging>
+
+  <php>
+    <ini name="error_reporting" value="-1"/>
+  </php>
+
   <testsuite name="unit test">
     <directory>tests/unit/</directory>
   </testsuite>

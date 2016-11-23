@@ -27,11 +27,9 @@ class FileClients //{{{
         BARDICHE_UPLOAD   = true,
         BARDICHE_DOWNLOAD = false;
 
-    public
-        $config, $type;
+    public $config, $type;
 
-    private static
-        $_defaultCommonConfig = [
+    private static $_defaultCommonConfig = [
             'negotiation' => false,
             'timeout'     => 90,
             'host'        => '',
@@ -133,11 +131,11 @@ class FileClients //{{{
 
     private function _negotiation() //{{{
     {
-        $connection = fsockopen($this->config['host'], $this->config['port'], $errno, $errstr, $this->config['timeout']);
+        $connection = @fsockopen($this->config['host'], $this->config['port'], $errno, $errstr, $this->config['timeout']);
         if (!$connection) {
             throw new BardicheException(BardicheException::getMessageJson('fsockopen error'));
         }
-        fclose($connection);
+        @fclose($connection);
     } //}}}
 
     public function upload() //{{{
@@ -183,16 +181,18 @@ class FileClients //{{{
         $model->__destruct();
     } //}}}
 
-    public function setValue(string $key, $value) //{{{
-    {
-        assert(array_key_exists($key, self::$_defaultCommonConfig) ? true : array_key_exists($key, self::$_defaultConfig[$this->type]), BardicheException::getMessageJson("Not found.config['{$value}']"));
-
-        $this->config[$key] = $value;
-    } //}}}
-
     public function setOptions(array $options) //{{{
     {
-        $this->config += $options;
+        foreach ($options as $key => $value) {
+            $this->setValue($key, $value);
+        }
+    } //}}}
+
+    public function setValue(string $key, $value) //{{{
+    {
+        assert(array_key_exists($key, self::$_defaultCommonConfig) ? true : array_key_exists($key, self::$_defaultConfig[$this->type]), BardicheException::getMessageJson("Not found.config['{$key}']"));
+
+        $this->config[$key] = $value;
     } //}}}
 
     public function getConfig() : array //{{{
