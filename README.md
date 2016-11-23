@@ -1,7 +1,7 @@
 bardiche
 ===
 
-[![Travis](https://img.shields.io/travis/KazuakiM/bardiche.svg?style=flat-square)](https://travis-ci.org/KazuakiM/bardiche/branches)
+[![Travis](https://img.shields.io/travis/KazuakiM/bardiche.svg?style=flat-square)](https://travis-ci.org/KazuakiM/bardiche)
 [![Coveralls](https://img.shields.io/coveralls/KazuakiM/bardiche.svg?style=flat-square)](https://coveralls.io/github/KazuakiM/bardiche?branch=master)
 [![GitHub issues](https://img.shields.io/github/issues/KazuakiM/bardiche.svg?style=flat-square)](https://github.com/KazuakiM/bardiche/issues)
 [![license](https://img.shields.io/github/license/KazuakiM/bardiche.svg?style=flat-square)](https://raw.githubusercontent.com/KazuakiM/bardiche/master/LICENSE)
@@ -10,7 +10,7 @@ FTP:zap:, FTPS:snowman:, SFTP:sunny: and SCP:snowflake: clients:jack_o_lantern::
 
 ##Usage
 
-[bardiche sampel repository](https://github.com/KazuakiM/bardiche-samples)
+You should check [bardiche sample repository](https://github.com/KazuakiM/bardiche-samples). And I'll write FTP sample code.
 
 One time connection by FTP.
 ```php

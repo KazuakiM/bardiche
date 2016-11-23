@@ -42,7 +42,7 @@ trait Ftp
             }
 
             //Pasv
-            if (!ftp_pasv($this->_connectionArray[$index]['resource'], $this->config['pasv'])) {
+            if (!@ftp_pasv($this->_connectionArray[$index]['resource'], $this->config['pasv'])) {
                 throw new BardicheException(BardicheException::getMessageJson('ftp_pasv error.'));
             }
         }

@@ -1,7 +1,6 @@
 <?php
 
-use KazuakiM\Bardiche\BardicheException;
-use KazuakiM\Bardiche\FileClientsType;
+namespace KazuakiM\Bardiche;
 
 /**
  * @copyright KazuakiM <kazuaki_mabuchi_to_go@hotmail.co.jp>
@@ -10,29 +9,40 @@ use KazuakiM\Bardiche\FileClientsType;
  *
  * @link      https://github.com/KazuakiM/bardiche
  */
+
 class EnumTest extends \PHPUnit_Framework_TestCase //{{{
 {
     /**
-     * @expectedException Error
-     */
-    public function testConstruct() //{{{
-    {
-        $fileClientsType = new FileClientsType(FileClientsType::BARDICHE_TYPE_FTP);
-    } //}}}
-
-    /**
-     * @expectedException InvalidArgumentException
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionCode    0
+     * @expectedExceptionMessage argument:OK
      */
     public function testInvalidArgumentException() //{{{
     {
-        require __DIR__ . '/../../src/FileClients.php';
+        $enumType = new EnumType(EnumType::ENUM_TYPE_OK());
+    } //}}}
 
-        $fileClientsType = new FileClientsType(FileClientsType::BARDICHE_TYPE_FTP());
+    public function testConstruct() //{{{
+    {
+        $enumType = new EnumType(EnumType::ENUM_TYPE_OK);
+    } //}}}
+
+    public function testValueOf() //{{{
+    {
+        $enumType = new EnumType(EnumType::ENUM_TYPE_OK);
+        $this->assertEquals(EnumType::ENUM_TYPE_OK, $enumType->valueOf(), BardicheException::getMessageJson('Internal Server Error.assertEquals'));
     } //}}}
 
     public function testToString() //{{{
     {
-        $fileClientsType = new FileClientsType(FileClientsType::BARDICHE_TYPE_FTP);
-        $this->assertEquals(FileClientsType::BARDICHE_TYPE_FTP, $fileClientsType, BardicheException::getMessageJson('Internal Server Error.assertEquals'));
+        $enumType = new EnumType(EnumType::ENUM_TYPE_OK);
+        $this->assertEquals(EnumType::ENUM_TYPE_OK, $enumType, BardicheException::getMessageJson('Internal Server Error.assertEquals'));
     } //}}}
+} //}}}
+
+final class EnumType extends Enum //{{{
+{
+    const
+        ENUM_TYPE_OK = 'OK',
+        ENUM_TYPE_NG = 'NG';
 } //}}}
