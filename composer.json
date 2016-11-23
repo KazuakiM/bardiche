@@ -20,10 +20,11 @@
         "php": ">=7.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "5.*"
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/phpunit":        "5.*"
     },
     "scripts": {
-        "test": "phpunit --colors=always"
+        "test": "phpunit --bootstrap tests/bootstrap.php --colors=always --coverage-clover build/logs/clover.xml"
     },
     "autoload": {
         "psr-4": {

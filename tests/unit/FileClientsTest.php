@@ -1,18 +1,26 @@
 <?php
 
-namespace KazuakiM\Bardiche;
+use KazuakiM\Bardiche\BardicheException;
+use KazuakiM\Bardiche\FileClients;
+use KazuakiM\Bardiche\FileClientsType;
 
-class FileClientsTest extends \PHPUnit_Framework_TestCase
+/**
+ * @copyright KazuakiM <kazuaki_mabuchi_to_go@hotmail.co.jp>
+ * @author    KazuakiM <kazuaki_mabuchi_to_go@hotmail.co.jp>
+ * @license   http://www.opensource.org/licenses/mit-license.php  MIT License
+ *
+ * @link      https://github.com/KazuakiM/bardiche
+ */
+class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
 {
     // Class variable {{{
-    protected $successftpConfig, $successScpConfig;
+    protected $successUploadFtpConfig, $successUploadScpConfig;
     private static $_remoteFtpRootDirectory = '/tmp/ftp';
     //}}}
 
     protected function setUp() //{{{
     {
-        // ftp {{{
-        $this->successftpConfig = [
+        $this->successUploadFtpConfig = [ //{{{
             'negotiation' => true,                             // options default: fallse
             'timeout'     => 90,                               // options default: 90
             'host'        => '127.0.0.1',
@@ -32,8 +40,7 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase
             'parallel' => 2,                                   // options default: 0
         ]; //}}}
 
-        // scp {{{
-        $this->successScpConfig = [
+        $this->successUploadScpConfig = [ //{{{
             'negotiation' => true,                             // options default: fallse
             'timeout'     => 90,                               // options default: 90
             'host'        => '127.0.0.1',
@@ -56,12 +63,80 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase
         ]; //}}}
     } //}}}
 
-    public function testOneFtp() //{{{
+    public function testConstruct() //{{{
+    {
+        $fileClients   = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $timout        = 300;
+        $fileInfoArray = [
+            'file_info' => [
+                [
+                    'remote_directory_path' => '/',
+                    'remote_file_name'      => 'override_wait.txt',
+                    'local_directory_path'  => '/tmp',
+                    'local_file_name'       => 'override_wait.txt',
+                    'ascii'                 => FTP_ASCII,
+                ],
+            ],
+        ];
+
+        $fileClients->setValue('timeout', $timout);
+        $this->successUploadFtpConfig['timeout'] = $timout;
+        $this->assertArraySubset($fileClients->getConfig(), $this->successUploadFtpConfig);
+
+        $fileClients->setOptions($fileInfoArray);
+        $this->successUploadFtpConfig['file_info'] = $fileInfoArray['file_info'];
+        $this->assertArraySubset($fileClients->getConfig(), $this->successUploadFtpConfig);
+    } //}}}
+
+    /**
+     * @expectedException KazuakiM\Bardiche\BardicheException
+     */
+    public function testNegotiation() //{{{
+    {
+        $this->successUploadFtpConfig['port'] = '2222';
+        $fileClients = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+    } //}}}
+
+    /**
+     * @expectedException KazuakiM\Bardiche\BardicheException
+     */
+    public function testGetUploadLocalFilePath() //{{{
+    {
+        $fileClients       = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $fileClientsConfig = $fileClients->getConfig();
+        foreach ($fileClientsConfig['file_info'] as $fileInfoArray) {
+            $fileClients->getUploadLocalFilePath($fileInfoArray);
+        }
+    } //}}}
+
+    public function testOneUploadFtp() //{{{
     {
         $this->assertTrue(touch('/tmp/sample_ftp_local.txt'), BardicheException::getMessageJson('Internal Server Error.touch'));
-        FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), $this->successftpConfig, FileClients::BARDICHE_UPLOAD);
+        FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig, FileClients::BARDICHE_UPLOAD);
 
-        foreach ($this->successftpConfig['file_info'] as $fileInfoArray) {
+        foreach ($this->successUploadFtpConfig['file_info'] as $fileInfoArray) {
+            $localFilePath  = FileClients::getUploadLocalFilePath($fileInfoArray);
+            $remoteFilePath = FileClients::getRemoteFilePath($fileInfoArray);
+
+            $this->assertFileExists(self::$_remoteFtpRootDirectory . $remoteFilePath, BardicheException::getMessageJson('Internal Server Error.assertFileExists'));
+            $this->assertFileEquals(self::$_remoteFtpRootDirectory . $remoteFilePath, $localFilePath, BardicheException::getMessageJson('Internal Server Error.assertFileEquals'));
+        }
+    } //}}}
+
+    public function testOneDownloadFtp() //{{{
+    {
+        $this->successUploadFtpConfig['file_info'] = [
+            [
+                'remote_directory_path' => '/',
+                'remote_file_name'      => 'sample_ftp_remote.txt',
+                'local_directory_path'  => '/tmp',
+                'local_file_name'       => 'sample_ftp_dl_local.txt',
+                'ascii'                 => FTP_ASCII,
+            ],
+        ];
+        FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig, FileClients::BARDICHE_DOWNLOAD);
+
+        foreach ($this->successUploadFtpConfig['file_info'] as $fileInfoArray) {
             $localFilePath  = FileClients::getUploadLocalFilePath($fileInfoArray);
             $remoteFilePath = FileClients::getRemoteFilePath($fileInfoArray);
 
@@ -71,12 +146,12 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase
     } //}}}
 
     //TODO: extention 'ssh2' error.
-    //public function testOneScp() //{{{
+    //public function testOneUploadScp() //{{{
     //{
     //    $this->assertTrue(touch('/tmp/sample_scp_local.txt'), BardicheException::getMessageJson('Internal Server Error.touch'));
-    //    FileClients::one(FileClientsType::BARDICHE_TYPE_SCP(), $this->successScpConfig, FileClients::BARDICHE_UPLOAD);
+    //    FileClients::one(FileClientsType::BARDICHE_TYPE_SCP(), $this->successUploadScpConfig, FileClients::BARDICHE_UPLOAD);
 
-    //    foreach ($this->successScpConfig['file_info'] as $fileInfoArray) {
+    //    foreach ($this->successUploadScpConfig['file_info'] as $fileInfoArray) {
     //        $localFilePath  = FileClients::getUploadLocalFilePath($fileInfoArray);
     //        $remoteFilePath = FileClients::getRemoteFilePath($fileInfoArray);
 
@@ -84,4 +159,4 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase
     //        $this->assertFileEquals($remoteFilePath, $localFilePath, BardicheException::getMessageJson('Internal Server Error.assertFileEquals'));
     //    }
     //} //}}}
-}
+} //}}}

@@ -1,9 +1,10 @@
 bardiche
 ===
 
-[![](https://img.shields.io/travis/KazuakiM/bardiche.svg)](https://travis-ci.org/KazuakiM/bardiche)
-[![](https://img.shields.io/github/issues/KazuakiM/bardiche.svg)](https://github.com/KazuakiM/bardiche/issues)
-[![](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Travis](https://img.shields.io/travis/KazuakiM/bardiche.svg?style=flat-square)](https://travis-ci.org/KazuakiM/bardiche/branches)
+[![Coveralls](https://img.shields.io/coveralls/KazuakiM/bardiche.svg?style=flat-square)](https://coveralls.io/github/KazuakiM/bardiche?branch=master)
+[![GitHub issues](https://img.shields.io/github/issues/KazuakiM/bardiche.svg?style=flat-square)](https://github.com/KazuakiM/bardiche/issues)
+[![license](https://img.shields.io/github/license/KazuakiM/bardiche.svg?style=flat-square)](https://raw.githubusercontent.com/KazuakiM/bardiche/master/LICENSE)
 
 FTP:zap:, FTPS:snowman:, SFTP:sunny: and SCP:snowflake: clients:jack_o_lantern::sparkles:
 

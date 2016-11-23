@@ -18,7 +18,7 @@ abstract class Enum
         $ref    = new \ReflectionObject($this);
         $consts = $ref->getConstants();
         if (!in_array($value, $consts, true)) {
-            throw new InvalidArgumentException();
+            throw new \InvalidArgumentException();
         }
 
         $this->_scalar = $value;
@@ -37,7 +37,7 @@ abstract class Enum
         return $this->_scalar;
     } //}}}
 
-    final public function __toString() : string //{{{
+    final public function __toString() //{{{
     {
         return (string) $this->_scalar;
     } //}}}
