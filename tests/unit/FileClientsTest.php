@@ -61,10 +61,17 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
         ]; //}}}
     } //}}}
 
-    public function testConstruct() //{{{
+    public static function assertFilePath(array $fileInfoArray, string $directoryPath, string $fileName) : bool //{{{
+    {
+        assert(array_key_exists($directoryPath, $fileInfoArray), BardicheException::getMessageJson("Not found.fileInfoArray['{$directoryPath}']"));
+        assert(array_key_exists($fileName,      $fileInfoArray), BardicheException::getMessageJson("Not found.fileInfoArray['{$fileName}']"));
+
+        return true;
+    } //}}}<`0`>
+
+    public function testSetOptions() //{{{
     {
         $fileClients   = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
-        $timout        = 300;
         $fileInfoArray = [
             'file_info' => [
                 [
@@ -76,13 +83,17 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
                 ],
             ],
         ];
-
-        $fileClients->setValue('timeout', $timout);
-        $this->successUploadFtpConfig['timeout'] = $timout;
-        $this->assertArraySubset($fileClients->getConfig(), $this->successUploadFtpConfig);
-
         $fileClients->setOptions($fileInfoArray);
         $this->successUploadFtpConfig['file_info'] = $fileInfoArray['file_info'];
+        $this->assertArraySubset($fileClients->getConfig(), $this->successUploadFtpConfig);
+    } //}}}
+
+    public function testSetValue() //{{{
+    {
+        $fileClients = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $timout      = 300;
+        $fileClients->setValue('timeout', $timout);
+        $this->successUploadFtpConfig['timeout'] = $timout;
         $this->assertArraySubset($fileClients->getConfig(), $this->successUploadFtpConfig);
     } //}}}
 
@@ -94,7 +105,7 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
     public function testNegotiation() //{{{
     {
         $this->successUploadFtpConfig['port'] = '2222';
-        $fileClients = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $fileClients                          = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
     } //}}}
 
     /**

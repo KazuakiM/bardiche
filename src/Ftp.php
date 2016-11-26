@@ -19,7 +19,7 @@ trait Ftp
     {
         $countFileInfo  = count($this->config['file_info']);
         $connectionSize = ($countFileInfo < $this->config['parallel']) ? $countFileInfo : $this->config['parallel'];
-        for ($index = 0; $index <= $connectionSize; $index++) {
+        for ($index = 0; $index <= $connectionSize; ++$index) {
             //Connection
             if ($this->type === FileClientsType::BARDICHE_TYPE_FTPS) {
                 $this->_connectionArray[$index] = [
@@ -50,10 +50,10 @@ trait Ftp
 
     private function _wait() //{{{
     {
-        while(true) {
+        while (true) {
             $endFlag = true;
             foreach ($this->_connectionArray as $key => $connection) {
-                if ($connection['status'] ==  FTP_MOREDATA) {
+                if ($connection['status'] == FTP_MOREDATA) {
                     $this->_connectionArray[$key]['status'] = @ftp_nb_continue($connection['resource']);
                     $endFlag                                = false;
                     break;
@@ -72,10 +72,10 @@ trait Ftp
         foreach ($this->config['file_info'] as $fileInfoArray) {
             assert(isset($fileInfoArray['ascii']), BardicheException::getMessageJson("Not found.config['ascii']"));
 
-            while(true) {
+            while (true) {
                 $setFlag = true;
                 foreach ($this->_connectionArray as $key => $connection) {
-                    if ($connection['status'] !=  FTP_MOREDATA) {
+                    if ($connection['status'] != FTP_MOREDATA) {
                         $this->_connectionArray[$key]['status'] = @ftp_nb_put($connection['resource'], ltrim(self::getRemoteFilePath($fileInfoArray), '/'), self::getUploadLocalFilePath($fileInfoArray), $fileInfoArray['ascii']);
                         $setFlag                                = true;
                         break;
@@ -99,10 +99,10 @@ trait Ftp
         foreach ($this->config['file_info'] as $fileInfoArray) {
             assert(isset($fileInfoArray['ascii']), BardicheException::getMessageJson("Not found.config['ascii']"));
 
-            while(true) {
+            while (true) {
                 $setFlag = true;
                 foreach ($this->_connectionArray as $key => $connection) {
-                    if ($connection['status'] !=  FTP_MOREDATA) {
+                    if ($connection['status'] != FTP_MOREDATA) {
                         $this->_connectionArray[$key]['status'] = @ftp_nb_get($connection['resource'], self::getDownloadLocalFilePath($fileInfoArray), ltrim(self::getRemoteFilePath($fileInfoArray), '/'), $fileInfoArray['ascii']);
                         $setFlag                                = true;
                         break;

@@ -1,0 +1,8 @@
+checks:
+    php: true
+
+tools:
+    external_code_coverage: true
+
+    php_cs_fixer:
+        config: {level: symfony, fixers: [align_double_arrow,align_equals,concat_with_spaces,ordered_use,short_array_syntax]}
