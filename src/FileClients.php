@@ -11,67 +11,65 @@ namespace KazuakiM\Bardiche;
  */
 final class FileClientsType extends Enum //{{{
 {
-    const
-        BARDICHE_TYPE_FTP  = 'ftp',
-        BARDICHE_TYPE_FTPS = 'ftps',
-        BARDICHE_TYPE_SFTP = 'sftp',
-        BARDICHE_TYPE_SCP  = 'scp';
+    const BARDICHE_TYPE_FTP  = 'ftp';
+    const BARDICHE_TYPE_FTPS = 'ftps';
+    const BARDICHE_TYPE_SFTP = 'sftp';
+    const BARDICHE_TYPE_SCP  = 'scp';
 } //}}}
 
 class FileClients //{{{
 {
-    use Ftp, Ssh;
+    use Ftp;
+    use Ssh;
 
     // Class variable {{{
-    const
-        BARDICHE_UPLOAD   = true,
-        BARDICHE_DOWNLOAD = false;
-
-    public $config, $type;
-
+    const BARDICHE_UPLOAD   = true;
+    const BARDICHE_DOWNLOAD = false;
+    public $config;
+    public $type;
     private static $_defaultCommonConfig = [
-            'negotiation' => false,
-            'timeout'     => 90,
-            'host'        => '',
-            'username'    => '',
-            'password'    => '',
-            'file_info'   => [
-                [
-                    'remote_directory_path' => '',
-                    'remote_file_name'      => '',
-                    'local_directory_path'  => '',
-                    'local_file_name'       => '',
-                    'ascii'                 => FTP_ASCII, // options: ftp and ftps only.
-                ],
+        'negotiation' => false,
+        'timeout'     => 90,
+        'host'        => '',
+        'username'    => '',
+        'password'    => '',
+        'file_info'   => [
+            [
+                'remote_directory_path' => '',
+                'remote_file_name'      => '',
+                'local_directory_path'  => '',
+                'local_file_name'       => '',
+                'ascii'                 => FTP_ASCII, // options: ftp and ftps only.
             ],
         ],
-        $_defaultConfig = [
-            'ftp' => [
-                'port'     => 21,
-                'pasv'     => true,
-                'parallel' => 0,
-            ],
-            'ftps' => [
-                'port'     => 21,
-                'pasv'     => true,
-                'parallel' => 0,
-            ],
-            'sftp' => [
-                'port'        => 22,
-                'method'      => [],
-                'callbacks'   => [],
-                'pubkeyfile'  => '',
-                'privkeyfile' => '',
-            ],
-            'scp' => [
-                'port'        => 22,
-                'method'      => [],
-                'callbacks'   => [],
-                'pubkeyfile'  => '',
-                'privkeyfile' => '',
-                'permission'  => 0644,
-            ],
-        ];
+    ];
+    private static $_defaultConfig = [
+        'ftp' => [
+            'port'     => 21,
+            'pasv'     => true,
+            'parallel' => 0,
+        ],
+        'ftps' => [
+            'port'     => 21,
+            'pasv'     => true,
+            'parallel' => 0,
+        ],
+        'sftp' => [
+            'port'        => 22,
+            'method'      => [],
+            'callbacks'   => [],
+            'pubkeyfile'  => '',
+            'privkeyfile' => '',
+        ],
+        'scp' => [
+            'port'        => 22,
+            'method'      => [],
+            'callbacks'   => [],
+            'pubkeyfile'  => '',
+            'privkeyfile' => '',
+            'permission'  => 0644,
+        ],
+    ];
     //}}}
 
     public function __construct(FileClientsType $type, array $config) //{{{
@@ -80,8 +78,8 @@ class FileClients //{{{
         $this->type = $type->valueOf();
         $this->_setConfig($config);
 
-        assert(0 < strlen($this->config['host']),    BardicheException::getMessageJson("Not found.config['host']"));
-        assert(0 < strlen($this->config['port']),    BardicheException::getMessageJson("Not found.config['port']"));
+        assert(0 < strlen($this->config['host']), BardicheException::getMessageJson("Not found.config['host']"));
+        assert(0 < strlen($this->config['port']), BardicheException::getMessageJson("Not found.config['port']"));
         assert(0 < strlen($this->config['timeout']), BardicheException::getMessageJson("Not found.config['timeout']"));
 
         //Negotiation
@@ -138,7 +136,7 @@ class FileClients //{{{
         @fclose($connection);
     } //}}}
 
-    public function upload() //{{{
+    public function uploadFile() //{{{
     {
         switch ($this->type) {
         case FileClientsType::BARDICHE_TYPE_FTP:
@@ -154,7 +152,7 @@ class FileClients //{{{
         }
     } //}}}
 
-    public function download() //{{{
+    public function downloadFile() //{{{
     {
         switch ($this->type) {
         case FileClientsType::BARDICHE_TYPE_FTP:
@@ -174,9 +172,9 @@ class FileClients //{{{
     {
         $model = new self($type, $config);
         if ($upload) {
-            $model->upload();
+            $model->uploadFile();
         } else {
-            $model->download();
+            $model->downloadFile();
         }
         $model->__destruct();
     } //}}}
@@ -202,16 +200,14 @@ class FileClients //{{{
 
     public static function getRemoteFilePath(array $fileInfoArray) : string //{{{
     {
-        assert(array_key_exists('remote_directory_path', $fileInfoArray), BardicheException::getMessageJson("Not found.fileInfoArray['remote_directory_path']"));
-        assert(array_key_exists('remote_file_name',      $fileInfoArray), BardicheException::getMessageJson("Not found.fileInfoArray['remote_file_name']"));
+        assert(FileClientsTest::assertFilePath($fileInfoArray, 'remote_directory_path', 'remote_file_name'));
 
         return self::_getFilePath($fileInfoArray['remote_directory_path'], $fileInfoArray['remote_file_name']);
     } //}}}
 
     public static function getUploadLocalFilePath(array $fileInfoArray) : string //{{{
     {
-        assert(array_key_exists('local_directory_path', $fileInfoArray), BardicheException::getMessageJson("Not found.fileInfoArray['local_directory_path']"));
-        assert(array_key_exists('local_file_name',      $fileInfoArray), BardicheException::getMessageJson("Not found.fileInfoArray['local_file_name']"));
+        assert(FileClientsTest::assertFilePath($fileInfoArray, 'local_directory_path', 'local_file_name'));
 
         $uploadLocalFilePath = self::_getFilePath($fileInfoArray['local_directory_path'], $fileInfoArray['local_file_name']);
         if (!@file_exists($uploadLocalFilePath)) {
@@ -223,8 +219,7 @@ class FileClients //{{{
 
     public static function getDownloadLocalFilePath(array $fileInfoArray) : string //{{{
     {
-        assert(array_key_exists('local_directory_path', $fileInfoArray), BardicheException::getMessageJson("Not found.fileInfoArray['local_directory_path']"));
-        assert(array_key_exists('local_file_name',      $fileInfoArray), BardicheException::getMessageJson("Not found.fileInfoArray['local_file_name']"));
+        assert(FileClientsTest::assertFilePath($fileInfoArray, 'local_directory_path', 'local_file_name'));
 
         return self::_getFilePath($fileInfoArray['local_directory_path'], $fileInfoArray['local_file_name']);
     } //}}}

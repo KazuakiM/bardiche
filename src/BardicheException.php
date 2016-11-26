@@ -14,7 +14,7 @@ class BardicheException extends \Exception
     public static function getMessageJson(string $message) : string //{{{
     {
         return json_encode([
-            'message' => $message
+            'message' => $message,
         ]);
     } //}}}
 }

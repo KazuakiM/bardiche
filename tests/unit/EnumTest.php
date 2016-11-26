@@ -9,7 +9,6 @@ namespace KazuakiM\Bardiche;
  *
  * @link      https://github.com/KazuakiM/bardiche
  */
-
 class EnumTest extends \PHPUnit_Framework_TestCase //{{{
 {
     /**
