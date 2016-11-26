@@ -12,11 +12,15 @@ namespace KazuakiM\Bardiche;
 trait Ssh
 {
     // Class variable {{{
-    private $_connection, $_sftp;
+    private $_connection;
+    private $_sftp;
     //}}}
 
     public function initSsh() //{{{
     {
+        assert(isset($this->config), BardicheException::getMessageJson('Not found.this->config'));
+        assert(isset($this->type), BardicheException::getMessageJson('Not found.this->type'));
+
         //Connection
         $this->_connection = @ssh2_connect($this->config['host'], $this->config['port'], $this->config['method'], $this->config['callbacks']);
         if ($this->_connection === false) {
@@ -47,7 +51,7 @@ trait Ssh
     public function uploadSftp() //{{{
     {
         foreach ($this->config['file_info'] as $fileInfoArray) {
-            if (@file_put_contents("ssh2.sftp://{$this->_sftp}" . self::getRemoteFilePath($fileInfoArray), @fopen(self::getUploadLocalFilePath($fileInfoArray), 'r')) === false) {
+            if (@file_put_contents(sprintf("ssh2.sftp://{$this->_sftp}%s", self::getRemoteFilePath($fileInfoArray)), @fopen(self::getUploadLocalFilePath($fileInfoArray), 'r')) === false) {
                 throw new BardicheException(BardicheException::getMessageJson('file_put_contents or fopen error.'));
             }
         }
@@ -56,7 +60,7 @@ trait Ssh
     public function downloadSftp() //{{{
     {
         foreach ($this->config['file_info'] as $fileInfoArray) {
-            if (@file_put_contents(self::getDownloadLocalFilePath($fileInfoArray), @fopen("ssh2.sftp://{$this->_sftp}" . self::getRemoteFilePath($fileInfoArray), 'r'), LOCK_EX) === false) {
+            if (@file_put_contents(self::getDownloadLocalFilePath($fileInfoArray), @fopen(sprintf("ssh2.sftp://{$this->_sftp}%s", self::getRemoteFilePath($fileInfoArray)), 'r'), LOCK_EX) === false) {
                 throw new BardicheException(BardicheException::getMessageJson('file_put_contents or fopen error.'));
             }
         }

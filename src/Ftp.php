@@ -17,6 +17,9 @@ trait Ftp
 
     private function _auth() //{{{
     {
+        assert(isset($this->config), BardicheException::getMessageJson('Not found.this->config'));
+        assert(isset($this->type), BardicheException::getMessageJson('Not found.this->type'));
+
         $countFileInfo  = count($this->config['file_info']);
         $connectionSize = ($countFileInfo < $this->config['parallel']) ? $countFileInfo : $this->config['parallel'];
         for ($index = 0; $index <= $connectionSize; ++$index) {

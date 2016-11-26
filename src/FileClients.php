@@ -9,7 +9,7 @@ namespace KazuakiM\Bardiche;
  *
  * @link      https://github.com/KazuakiM/bardiche
  */
-final class FileClientsType extends Enum //{{{
+final class FileClientsType extends AbstractEnum //{{{
 {
     const BARDICHE_TYPE_FTP  = 'ftp';
     const BARDICHE_TYPE_FTPS = 'ftps';
@@ -149,6 +149,9 @@ class FileClients //{{{
         case FileClientsType::BARDICHE_TYPE_SCP:
             $this->uploadScp();
             break;
+        default:
+            throw new BardicheException(BardicheException::getMessageJson(sprintf('type:%s error', $this->type)));
+            break;
         }
     } //}}}
 
@@ -164,6 +167,9 @@ class FileClients //{{{
             break;
         case FileClientsType::BARDICHE_TYPE_SCP:
             $this->downloadScp();
+            break;
+        default:
+            throw new BardicheException(BardicheException::getMessageJson(sprintf('type:%s error', $this->type)));
             break;
         }
     } //}}}
@@ -188,7 +194,7 @@ class FileClients //{{{
 
     public function setValue(string $key, $value) //{{{
     {
-        assert(array_key_exists($key, self::$_defaultCommonConfig) ? true : array_key_exists($key, self::$_defaultConfig[$this->type]), BardicheException::getMessageJson("Not found.config['{$key}']"));
+        assert(array_key_exists($key, self::$_defaultCommonConfig) ? true : array_key_exists($key, self::$_defaultConfig[$this->type]), BardicheException::getMessageJson(sprintf("Not found.config['%s']", $key)));
 
         $this->config[$key] = $value;
     } //}}}
@@ -226,6 +232,6 @@ class FileClients //{{{
 
     private static function _getFilePath(string $directoryPath, string $fileName) : string //{{{
     {
-        return rtrim($directoryPath, '/') . "/{$fileName}";
+        return sprintf('%s/%s', rtrim($directoryPath, '/'), $fileName);
     } //}}}
 } //}}}

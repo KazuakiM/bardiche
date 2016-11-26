@@ -9,7 +9,7 @@ namespace KazuakiM\Bardiche;
  *
  * @link      https://github.com/KazuakiM/bardiche
  */
-abstract class Enum
+abstract class AbstractEnum
 {
     private $_scalar;
 
@@ -18,20 +18,26 @@ abstract class Enum
         $ref    = new \ReflectionObject($this);
         $consts = $ref->getConstants();
         if (!in_array($value, $consts, true)) {
-            throw new \InvalidArgumentException("argument:{$value}");
+            throw new \InvalidArgumentException(sprintf('argument:%s', $value));
         }
 
         $this->_scalar = $value;
     } //}}}
 
+    /**
+     * @return object Class Object
+     */
     final public static function __callStatic(string $label, array $args) //{{{
     {
         $class = get_called_class();
-        $const = constant("$class::$label");
+        $const = constant(sprintf('%s::%s', $class, $label));
 
         return new $class($const);
     } //}}}
 
+    /**
+     * @return mixed Value
+     */
     final public function valueOf() //{{{
     {
         return $this->_scalar;
