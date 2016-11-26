@@ -9,7 +9,7 @@ namespace KazuakiM\Bardiche;
  *
  * @link      https://github.com/KazuakiM/bardiche
  */
-class EnumTest extends \PHPUnit_Framework_TestCase //{{{
+class AbstractEnumTest extends \PHPUnit_Framework_TestCase //{{{
 {
     /**
      * @expectedException        InvalidArgumentException
@@ -39,9 +39,8 @@ class EnumTest extends \PHPUnit_Framework_TestCase //{{{
     } //}}}
 } //}}}
 
-final class EnumType extends Enum //{{{
+final class EnumType extends AbstractEnum //{{{
 {
-    const
-        ENUM_TYPE_OK = 'OK',
-        ENUM_TYPE_NG = 'NG';
+    const ENUM_TYPE_OK = 'OK';
+    const ENUM_TYPE_NG = 'NG';
 } //}}}

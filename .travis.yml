@@ -25,8 +25,8 @@ script:
   - composer test
 
 after_success:
-  - php tests/bin/ocular.phar code-coverage:upload --format=php-clover coverage.clover;
-  - php tests/bin/coveralls.phar --config .coveralls.yml --verbose
+  - php tests/bin/ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml --verbose
+  - php tests/bin/coveralls.phar --config=.coveralls.yml --coverage_clover=build/logs/clover.xml --verbose
 
 notifications:
   email: false

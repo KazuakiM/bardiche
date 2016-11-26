@@ -12,7 +12,8 @@ namespace KazuakiM\Bardiche;
 class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
 {
     // Class variable {{{
-    protected $successUploadFtpConfig, $successUploadScpConfig;
+    protected $successUploadFtpConfig;
+    protected $successUploadScpConfig;
     private static $_remoteFtpRootDirectory = '/tmp/ftp';
     //}}}
 
@@ -63,11 +64,46 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
 
     public static function assertFilePath(array $fileInfoArray, string $directoryPath, string $fileName) : bool //{{{
     {
-        assert(array_key_exists($directoryPath, $fileInfoArray), BardicheException::getMessageJson("Not found.fileInfoArray['{$directoryPath}']"));
-        assert(array_key_exists($fileName,      $fileInfoArray), BardicheException::getMessageJson("Not found.fileInfoArray['{$fileName}']"));
+        assert(array_key_exists($directoryPath, $fileInfoArray), BardicheException::getMessageJson(sprintf("Not found.fileInfoArray['%s']", $directoryPath)));
+        assert(array_key_exists($fileName,      $fileInfoArray), BardicheException::getMessageJson(sprintf("Not found.fileInfoArray['%s']", $fileName)));
 
         return true;
     } //}}}<`0`>
+
+    /**
+     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedExceptionCode    0
+     * @expectedExceptionMessage {"message":"fsockopen error"}
+     */
+    public function testNegotiation() //{{{
+    {
+        $this->successUploadFtpConfig['port'] = '2222';
+        $fileClients                          = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+    } //}}}
+
+    /**
+     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedExceptionCode    0
+     * @expectedExceptionMessage {"message":"type:fate error"}
+     */
+    public function testUploadFile() //{{{
+    {
+        $fileClients       = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $fileClients->type = 'fate';
+        $fileClients->uploadFile();
+    } //}}}
+
+    /**
+     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedExceptionCode    0
+     * @expectedExceptionMessage {"message":"type:fate error"}
+     */
+    public function testDownloadFile() //{{{
+    {
+        $fileClients       = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $fileClients->type = 'fate';
+        $fileClients->DownloadFile();
+    } //}}}
 
     public function testSetOptions() //{{{
     {
@@ -95,17 +131,6 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
         $fileClients->setValue('timeout', $timout);
         $this->successUploadFtpConfig['timeout'] = $timout;
         $this->assertArraySubset($fileClients->getConfig(), $this->successUploadFtpConfig);
-    } //}}}
-
-    /**
-     * @expectedException        KazuakiM\Bardiche\BardicheException
-     * @expectedExceptionCode    0
-     * @expectedExceptionMessage {"message":"fsockopen error"}
-     */
-    public function testNegotiation() //{{{
-    {
-        $this->successUploadFtpConfig['port'] = '2222';
-        $fileClients                          = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
     } //}}}
 
     /**

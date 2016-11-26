@@ -3,7 +3,7 @@ bardiche
 
 [![Travis](https://img.shields.io/travis/KazuakiM/bardiche.svg?style=flat-square)](https://travis-ci.org/KazuakiM/bardiche)
 [![Coveralls](https://img.shields.io/coveralls/KazuakiM/bardiche.svg?style=flat-square)](https://coveralls.io/github/KazuakiM/bardiche?branch=master)
-[![Scrutinizer](https://img.shields.io/scrutinizer/KazuakiM/bardiche.svg?style=flat-square)](https://scrutinizer-ci.com/g/KazuakiM/bardiche/)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/KazuakiM/bardiche.svg?style=flat-square)](https://scrutinizer-ci.com/g/KazuakiM/bardiche/)
 [![GitHub issues](https://img.shields.io/github/issues/KazuakiM/bardiche.svg?style=flat-square)](https://github.com/KazuakiM/bardiche/issues)
 [![license](https://img.shields.io/github/license/KazuakiM/bardiche.svg?style=flat-square)](https://raw.githubusercontent.com/KazuakiM/bardiche/master/LICENSE)
 
