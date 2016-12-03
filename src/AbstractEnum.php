@@ -35,16 +35,16 @@ abstract class AbstractEnum
         return new $class($const);
     } //}}}
 
+    public function __toString() //{{{
+    {
+        return (string) $this->_scalar;
+    } //}}}
+
     /**
      * @return mixed Value
      */
     final public function valueOf() //{{{
     {
         return $this->_scalar;
-    } //}}}
-
-    final public function __toString() : string //{{{
-    {
-        return (string) $this->_scalar;
     } //}}}
 }

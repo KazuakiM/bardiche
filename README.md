@@ -12,7 +12,7 @@ FTP:zap:, FTPS:snowman:, SFTP:sunny: and SCP:snowflake: clients:jack_o_lantern::
 
 ##Usage
 
-You should check [bardiche sample repository](https://github.com/KazuakiM/bardiche-samples). And I'll write FTP sample code.
+You should check [bardiche sample repository](https://github.com/KazuakiM/bardiche-samples) and [document](http://kazuakim.github.io/bardiche/). And I'll write FTP sample code.
 
 One time connection by FTP.
 ```php
@@ -54,8 +54,8 @@ try {
 
 Here is the list of tested features and unsupported features:
 
-* ssh test case. (very hard mode...)
-* ftp tset case via [Scrutinizer](https://scrutinizer-ci.com/g/KazuakiM/bardiche/)
+* ssh test case via [TravisCI](https://travis-ci.org/KazuakiM/bardiche).
+* ftp tset case via [Scrutinizer](https://scrutinizer-ci.com/g/KazuakiM/bardiche/).
 
 ##Author
 

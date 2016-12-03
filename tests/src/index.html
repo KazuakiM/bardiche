@@ -8,10 +8,31 @@
         <title>KazuakiM/bardiche</title>
     </head>
     <body>
-        <h1>KazuakiM/bardiche</h1>
-        <ul>
-            <li><a href="document/index.html">API Document</a></li>
-            <li><a href="coverage/coverage.html/index.html">Coverage Report</a></li>
-        </ul>
+        <h2>KazuakiM/bardiche</h2>
+        <hr>
+        <div class="container">
+            <table class="table">
+                <tr><th>toc</th></tr>
+                <tr><td><ul>
+                    <li><a href="http://kazuakim.github.io/bardiche/document/index.html">API Document</a></li>
+                    <li><a href="http://kazuakim.github.io/bardiche/coverage/coverage.html/index.html">Coverage Report</a></li>
+                </ul></td></tr>
+            </table>
+            <table class="table">
+                <tr><th>ApiGen Upgrade</th></tr>
+                <tr><td><pre>
+cd /tmp
+git clone git@github.com:ApiGen/ApiGen.git
+cd ApiGen
+composer update
+curl -LSs http://box-project.github.io/box2/installer.php | php
+php box.phar build
+cp apigen.phar ~/tests/bin/
+cd ~/
+composer document
+ll /tmp/build/document/
+                </pre></td></tr>
+            </table>
+        </div>
     </body>
 </html>

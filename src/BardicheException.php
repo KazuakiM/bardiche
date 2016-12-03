@@ -11,7 +11,7 @@ namespace KazuakiM\Bardiche;
  */
 class BardicheException extends \Exception
 {
-    public static function getMessageJson(string $message) : string //{{{
+    public static function getMessageJson(string $message) //{{{
     {
         return json_encode([
             'message' => $message,
