@@ -15,7 +15,6 @@ before_install:
   # echo "extension=ssh2.so" >> $HOME/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 before_script:
-  - mkdir -p build/logs
   - sh tests/before_script.sh
   - composer install --no-progress --no-ansi --no-interaction --profile
 
@@ -25,10 +24,17 @@ script:
   - composer test
 
 after_success:
-  - php tests/bin/ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml --verbose
-  - php tests/bin/coveralls.phar --config=.coveralls.yml --coverage_clover=build/logs/clover.xml --verbose
+  - mkdir -p /tmp/build/coverage /tmp/build/document
+  - composer quality
+  - composer coverage
+  - composer document
+  - if [ $TRAVIS_PHP_VERSION = '7.0' ] && [ $TRAVIS_BRANCH = 'master' ] && [ $TRAVIS_PULL_REQUEST = 'false' ]; then sh tests/generate-api.sh; fi
 
 notifications:
   email: false
+
+env:
+  global:
+    secure: HS4cdnBuyeGhKyDDFSfhDIHctaWLVRrjyMvTK/XzCM8DsNVZ/w6TxebOi7zsnAqYn57LUtt8ytPM0XuGVtJfmFLlWaEBLN3TtdRq2ZYmb0A8KqYaXp/PvxEQiDtzh/7AA/3y13VVhqNKhJMg6+WJtgpO9Ht8XW0AUhdhuZj6jT7Jkx9GpW6iVHGB7Y0eRbwRvlr5es6uOaFmy9SgYuk4N9odyIbCIfoua6D1jBevN/B5CEx2I6MImLheyNJRKJ+JBwYwThg2Tcmuxrp+wfM1mpHKcykgdd7XWq8fx8eJthkfgrVL07HbeiQB87RtwWa1H7WPKrmayeM8+CbD1EIUoHWUbijsV0QUCSH1follvZh0F9ub0MmJK7lKkLXCtfImhjGyf0Y3cJT294eVq1mUF7G68zeVRvguyDuXb3ykOv9D4Bm5nSRFeZcxo5FZTKVmz5ny8V4I/SC6GkHcdjaA9lvyP8s+7eFjRxVOJeZXM3uQzPcVBYewJZ+ck2ERIJ3dUw3S8tzwtsr8dDwrGT1xhnjpBqDLTZPOT8ba1CwnHI6K7hblH2N90YDRhyYFw3QV8knYRhQdDOvZzJa1cPuo5C8QOiGwzOmT2CR6HJ+GZRqRcePJ587p1h82cvCWRpjCIVOHlHtkM5IxyaSvwKDX+3Fs6JMMZLvPkR0+6uUalC4=
 
 # vim:fdl=0:sts=2:sw=2:ts=2

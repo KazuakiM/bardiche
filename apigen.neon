@@ -1,0 +1,4 @@
+source:      src/
+destination: /tmp/build/document/
+title:       bardiche
+# vim:fdl=0:sts=2:sw=2:ts=2
