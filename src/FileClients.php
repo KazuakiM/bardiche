@@ -199,19 +199,19 @@ class FileClients //{{{
         $this->config[$key] = $value;
     } //}}}
 
-    public function getConfig() : array //{{{
+    public function getConfig() //{{{
     {
         return $this->config;
     } //}}}
 
-    public static function getRemoteFilePath(array $fileInfoArray) : string //{{{
+    public static function getRemoteFilePath(array $fileInfoArray) //{{{
     {
         assert(FileClientsTest::assertFilePath($fileInfoArray, 'remote_directory_path', 'remote_file_name'));
 
         return self::_getFilePath($fileInfoArray['remote_directory_path'], $fileInfoArray['remote_file_name']);
     } //}}}
 
-    public static function getUploadLocalFilePath(array $fileInfoArray) : string //{{{
+    public static function getUploadLocalFilePath(array $fileInfoArray) //{{{
     {
         assert(FileClientsTest::assertFilePath($fileInfoArray, 'local_directory_path', 'local_file_name'));
 
@@ -223,14 +223,14 @@ class FileClients //{{{
         return $uploadLocalFilePath;
     } //}}}
 
-    public static function getDownloadLocalFilePath(array $fileInfoArray) : string //{{{
+    public static function getDownloadLocalFilePath(array $fileInfoArray) //{{{
     {
         assert(FileClientsTest::assertFilePath($fileInfoArray, 'local_directory_path', 'local_file_name'));
 
         return self::_getFilePath($fileInfoArray['local_directory_path'], $fileInfoArray['local_file_name']);
     } //}}}
 
-    private static function _getFilePath(string $directoryPath, string $fileName) : string //{{{
+    private static function _getFilePath(string $directoryPath, string $fileName) //{{{
     {
         return sprintf('%s/%s', rtrim($directoryPath, '/'), $fileName);
     } //}}}
