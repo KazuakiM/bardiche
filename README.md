@@ -5,6 +5,7 @@ bardiche
 [![Coveralls](https://img.shields.io/coveralls/KazuakiM/bardiche.svg?style=flat-square)](https://coveralls.io/github/KazuakiM/bardiche?branch=master)
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/KazuakiM/bardiche.svg?style=flat-square)](https://scrutinizer-ci.com/g/KazuakiM/bardiche/)
 [![GitHub issues](https://img.shields.io/github/issues/KazuakiM/bardiche.svg?style=flat-square)](https://github.com/KazuakiM/bardiche/issues)
+[![Document](https://img.shields.io/badge/document-gh--pages-brightgreen.svg?style=flat-square)](http://kazuakim.github.io/bardiche/)
 [![license](https://img.shields.io/github/license/KazuakiM/bardiche.svg?style=flat-square)](https://raw.githubusercontent.com/KazuakiM/bardiche/master/LICENSE)
 
 FTP:zap:, FTPS:snowman:, SFTP:sunny: and SCP:snowflake: clients:jack_o_lantern::sparkles:
@@ -54,6 +55,7 @@ try {
 Here is the list of tested features and unsupported features:
 
 * ssh test case. (very hard mode...)
+* ftp tset case via [Scrutinizer](https://scrutinizer-ci.com/g/KazuakiM/bardiche/)
 
 ##Author
 
