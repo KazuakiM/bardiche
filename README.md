@@ -5,7 +5,8 @@ bardiche
 [![Coveralls](https://img.shields.io/coveralls/KazuakiM/bardiche.svg?style=flat-square)](https://coveralls.io/github/KazuakiM/bardiche?branch=master)
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/KazuakiM/bardiche.svg?style=flat-square)](https://scrutinizer-ci.com/g/KazuakiM/bardiche/)
 [![GitHub issues](https://img.shields.io/github/issues/KazuakiM/bardiche.svg?style=flat-square)](https://github.com/KazuakiM/bardiche/issues)
-[![Document](https://img.shields.io/badge/document-gh--pages-brightgreen.svg?style=flat-square)](http://kazuakim.github.io/bardiche/)
+[![Document](https://img.shields.io/badge/document-gh--pages-blue.svg?style=flat-square)](http://kazuakim.github.io/bardiche/)
+[![Support Version](https://img.shields.io/badge/php-%3E%3D7.0-blue.svg?style=flat-square)](http://php.net/supported-versions.php)
 [![license](https://img.shields.io/github/license/KazuakiM/bardiche.svg?style=flat-square)](https://raw.githubusercontent.com/KazuakiM/bardiche/master/LICENSE)
 
 FTP:zap:, FTPS:snowman:, SFTP:sunny: and SCP:snowflake: clients:jack_o_lantern::sparkles:
