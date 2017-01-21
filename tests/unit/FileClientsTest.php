@@ -68,7 +68,7 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
         assert(array_key_exists($fileName,      $fileInfoArray), BardicheException::getMessageJson(sprintf("Not found.fileInfoArray['%s']", $fileName)));
 
         return true;
-    } //}}}<`0`>
+    } //}}}
 
     /**
      * @expectedException        KazuakiM\Bardiche\BardicheException

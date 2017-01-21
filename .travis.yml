@@ -2,6 +2,7 @@ language: php
 
 php:
   - 7.0
+  - 7.1
 
 sudo: true
 
@@ -27,8 +28,6 @@ script:
 
 after_success:
   - composer quality
-  - composer coverage
-  - composer document
 
 notifications:
   email: false

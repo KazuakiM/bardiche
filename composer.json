@@ -23,10 +23,14 @@
         "phpunit/phpunit": ">=5.7"
     },
     "scripts": {
-        "coverage": "php tests/bin/coveralls.phar --config=.coveralls.yml --coverage_clover=docs/coverage/clover.xml --verbose",
-        "document": "php tests/bin/apigen.phar generate",
-        "quality":  "php tests/bin/ocular.phar code-coverage:upload --format=php-clover docs/coverage/clover.xml --verbose",
-        "test":     "phpunit --colors=always --coverage-clover=docs/coverage/clover.xml --coverage-html=docs/coverage --testdox-html=docs/logging.html --verbose"
+        "quality": [
+            "php tests/bin/coveralls.phar --config=.coveralls.yml --coverage_clover=docs/coverage/clover.xml --verbose",
+            "php tests/bin/ocular.phar code-coverage:upload --format=php-clover docs/coverage/clover.xml --verbose"
+        ],
+        "test": [
+            "phpunit --colors=always --coverage-clover=docs/coverage/clover.xml --coverage-html=docs/coverage --testdox-html=docs/logging.html --verbose",
+            "php tests/bin/apigen.phar generate"
+        ]
     },
     "autoload": {
         "psr-4": {
