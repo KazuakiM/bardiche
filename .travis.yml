@@ -26,9 +26,6 @@ script:
   # cat $HOME/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer test
 
-after_success:
-  - composer quality
-
 notifications:
   email: false
 
