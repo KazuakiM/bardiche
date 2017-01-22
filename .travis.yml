@@ -24,6 +24,7 @@ before_script:
 script:
   # php -r "phpinfo();"
   # cat $HOME/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - rm -rf /tmp/guzzle-cacert.pem
   - composer test
 
 notifications:
