@@ -20,13 +20,16 @@
         "php": ">=7.0"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=5.7"
+        "guzzlehttp/guzzle":      "~6.2",
+        "phpunit/phpunit":        "~5.7",
+        "satooshi/php-coveralls": "~1.0",
+        "scrutinizer/ocular":     "~1.3"
     },
     "scripts": {
         "test": [
-            "vendor/bin/phpunit --colors=always --verbose",
-            "php tests/bin/coveralls.phar --config=.coveralls.yml --coverage_clover=/tmp/clover.xml --verbose",
-            "php tests/bin/ocular.phar code-coverage:upload --format=php-clover /tmp/clover.xml --verbose"
+            "php vendor/bin/phpunit --colors=always --verbose",
+            "php vendor/bin/coveralls --config=.coveralls.yml --coverage_clover=/tmp/clover.xml --verbose",
+            "php vendor/bin/ocular code-coverage:upload --format=php-clover /tmp/clover.xml --verbose"
         ],
         "docs": [
             "phpunit --colors=always --coverage-clover=docs/coverage/clover.xml --coverage-html=docs/coverage --testdox-html=docs/logging.html --verbose",
