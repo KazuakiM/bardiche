@@ -24,7 +24,7 @@
     },
     "scripts": {
         "test": [
-            "phpunit --colors=always --verbose",
+            "vendor/bin/phpunit --colors=always --verbose",
             "php tests/bin/coveralls.phar --config=.coveralls.yml --coverage_clover=/tmp/clover.xml --verbose",
             "php tests/bin/ocular.phar code-coverage:upload --format=php-clover /tmp/clover.xml --verbose"
         ],
