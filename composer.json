@@ -25,8 +25,8 @@
     "scripts": {
         "test": [
             "phpunit --colors=always --verbose",
-            "php tests/bin/ocular.phar code-coverage:upload --format=php-clover docs/coverage/clover.xml --verbose",
-            "php tests/bin/coveralls.phar --config=.coveralls.yml --coverage_clover=docs/coverage/clover.xml --verbose"
+            "php tests/bin/coveralls.phar --config=.coveralls.yml --coverage_clover=/tmp/clover.xml --verbose",
+            "php tests/bin/ocular.phar code-coverage:upload --format=php-clover /tmp/clover.xml --verbose"
         ],
         "docs": [
             "phpunit --colors=always --coverage-clover=docs/coverage/clover.xml --coverage-html=docs/coverage --testdox-html=docs/logging.html --verbose",
