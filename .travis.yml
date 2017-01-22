@@ -25,6 +25,7 @@ script:
   # php -r "phpinfo();"
   # cat $HOME/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - cp docs/coverage/clover.xml /tmp/
+  - chmod -fR 777 /tmp/
   - composer test
 
 notifications:
