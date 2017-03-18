@@ -15,7 +15,7 @@ abstract class AbstractEnum
 
     public function __construct($value) //{{{
     {
-        $ref    = new \ReflectionObject($this);
+        $ref = new \ReflectionObject($this);
         $consts = $ref->getConstants();
         if (!in_array($value, $consts, true)) {
             throw new \InvalidArgumentException(sprintf('argument:%s', $value));

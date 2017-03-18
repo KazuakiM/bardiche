@@ -20,19 +20,19 @@ trait Ftp
         assert(isset($this->config), BardicheException::getMessageJson('Not found.this->config'));
         assert(isset($this->type), BardicheException::getMessageJson('Not found.this->type'));
 
-        $countFileInfo  = count($this->config['file_info']);
+        $countFileInfo = count($this->config['file_info']);
         $connectionSize = ($countFileInfo < $this->config['parallel']) ? $countFileInfo : $this->config['parallel'];
         for ($index = 0; $index <= $connectionSize; ++$index) {
             //Connection
             if ($this->type === FileClientsType::BARDICHE_TYPE_FTPS) {
                 $this->_connectionArray[$index] = [
                     'resource' => ftp_ssl_connect($this->config['host'], $this->config['port'], $this->config['timeout']),
-                    'status'   => FTP_FINISHED,
+                    'status' => FTP_FINISHED,
                 ];
             } else {
                 $this->_connectionArray[$index] = [
                     'resource' => ftp_connect($this->config['host'], $this->config['port'], $this->config['timeout']),
-                    'status'   => FTP_FINISHED,
+                    'status' => FTP_FINISHED,
                 ];
             }
             if ($this->_connectionArray[$index]['resource'] === false) {
@@ -56,9 +56,9 @@ trait Ftp
         while (true) {
             $endFlag = true;
             foreach ($this->_connectionArray as $key => $connection) {
-                if ($connection['status'] == FTP_MOREDATA) {
+                if ($connection['status'] === FTP_MOREDATA) {
                     $this->_connectionArray[$key]['status'] = @ftp_nb_continue($connection['resource']);
-                    $endFlag                                = false;
+                    $endFlag = false;
                     break;
                 }
             }
@@ -78,13 +78,12 @@ trait Ftp
             while (true) {
                 $setFlag = true;
                 foreach ($this->_connectionArray as $key => $connection) {
-                    if ($connection['status'] != FTP_MOREDATA) {
+                    if ($connection['status'] !== FTP_MOREDATA) {
                         $this->_connectionArray[$key]['status'] = @ftp_nb_put($connection['resource'], ltrim(self::getRemoteFilePath($fileInfoArray), '/'), self::getUploadLocalFilePath($fileInfoArray), $fileInfoArray['ascii']);
-                        $setFlag                                = true;
+                        $setFlag = true;
                         break;
-                    } else {
-                        $this->_connectionArray[$key]['status'] = @ftp_nb_continue($connection['resource']);
                     }
+                    $this->_connectionArray[$key]['status'] = @ftp_nb_continue($connection['resource']);
                 }
                 if ($setFlag) {
                     break;
@@ -105,13 +104,12 @@ trait Ftp
             while (true) {
                 $setFlag = true;
                 foreach ($this->_connectionArray as $key => $connection) {
-                    if ($connection['status'] != FTP_MOREDATA) {
+                    if ($connection['status'] !== FTP_MOREDATA) {
                         $this->_connectionArray[$key]['status'] = @ftp_nb_get($connection['resource'], self::getDownloadLocalFilePath($fileInfoArray), ltrim(self::getRemoteFilePath($fileInfoArray), '/'), $fileInfoArray['ascii']);
-                        $setFlag                                = true;
+                        $setFlag = true;
                         break;
-                    } else {
-                        $this->_connectionArray[$key]['status'] = @ftp_nb_continue($connection['resource']);
                     }
+                    $this->_connectionArray[$key]['status'] = @ftp_nb_continue($connection['resource']);
                 }
                 if ($setFlag) {
                     break;

@@ -9,7 +9,7 @@ namespace KazuakiM\Bardiche;
  *
  * @link      https://github.com/KazuakiM/bardiche
  */
-class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
+class FileClientsTest extends \PHPUnit\Framework\TestCase //{{{
 {
     // Class variable {{{
     protected $successUploadFtpConfig;
@@ -21,101 +21,101 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
     {
         $this->successUploadFtpConfig = [ //{{{
             'negotiation' => true,                             // options default: fallse
-            'timeout'     => 90,                               // options default: 90
-            'host'        => '127.0.0.1',
-            'username'    => 'fate',
-            'password'    => 'pass',
-            'file_info'   => [
+            'timeout' => 90,                               // options default: 90
+            'host' => '127.0.0.1',
+            'username' => 'fate',
+            'password' => 'pass',
+            'file_info' => [
                 [
                     'remote_directory_path' => '/',
-                    'remote_file_name'      => 'sample_ftp_remote.txt',
-                    'local_directory_path'  => '/tmp',
-                    'local_file_name'       => 'sample_ftp_local.txt',
-                    'ascii'                 => FTP_ASCII,
+                    'remote_file_name' => 'sample_ftp_remote.txt',
+                    'local_directory_path' => '/tmp',
+                    'local_file_name' => 'sample_ftp_local.txt',
+                    'ascii' => FTP_ASCII,
                 ],
             ],
-            'port'     => 10021,                               // options default: 21
-            'pasv'     => false,                               // options default: true
+            'port' => 10021,                               // options default: 21
+            'pasv' => false,                               // options default: true
             'parallel' => 2,                                   // options default: 0
         ]; //}}}
 
         $this->successUploadScpConfig = [ //{{{
             'negotiation' => true,                             // options default: fallse
-            'timeout'     => 90,                               // options default: 90
-            'host'        => '127.0.0.1',
-            'username'    => 'fate',
-            'password'    => 'pass',
-            'file_info'   => [
+            'timeout' => 90,                               // options default: 90
+            'host' => '127.0.0.1',
+            'username' => 'fate',
+            'password' => 'pass',
+            'file_info' => [
                 [
                     'remote_directory_path' => '/tmp',
-                    'remote_file_name'      => 'sample_scp_remote.txt',
-                    'local_directory_path'  => '/tmp',
-                    'local_file_name'       => 'sample_scp_local.txt',
+                    'remote_file_name' => 'sample_scp_remote.txt',
+                    'local_directory_path' => '/tmp',
+                    'local_file_name' => 'sample_scp_local.txt',
                 ],
             ],
-            'port'        => 21,                               // options default: 21
-            'method'      => [],                               // options
-            'callbacks'   => [],                               // options
-            'pubkeyfile'  => '',                               // options
+            'port' => 21,                               // options default: 21
+            'method' => [],                               // options
+            'callbacks' => [],                               // options
+            'pubkeyfile' => '',                               // options
             'privkeyfile' => '',                               // options
-            'permission'  => 0644,                             // options default: 0644
+            'permission' => 0644,                             // options default: 0644
         ]; //}}}
     } //}}}
 
-    public static function assertFilePath(array $fileInfoArray, string $directoryPath, string $fileName) : bool //{{{
+    public static function assertFilePath(array $fileInfoArray, string $directoryPath, string $fileName): bool //{{{
     {
         assert(array_key_exists($directoryPath, $fileInfoArray), BardicheException::getMessageJson(sprintf("Not found.fileInfoArray['%s']", $directoryPath)));
-        assert(array_key_exists($fileName,      $fileInfoArray), BardicheException::getMessageJson(sprintf("Not found.fileInfoArray['%s']", $fileName)));
+        assert(array_key_exists($fileName, $fileInfoArray), BardicheException::getMessageJson(sprintf("Not found.fileInfoArray['%s']", $fileName)));
 
         return true;
-    } //}}}<`0`>
+    } //}}}
 
     /**
-     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedException        \KazuakiM\Bardiche\BardicheException
      * @expectedExceptionCode    0
      * @expectedExceptionMessage {"message":"fsockopen error"}
      */
     public function testNegotiation() //{{{
     {
         $this->successUploadFtpConfig['port'] = '2222';
-        $fileClients                          = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $fileClients = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
     } //}}}
 
     /**
-     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedException        \KazuakiM\Bardiche\BardicheException
      * @expectedExceptionCode    0
      * @expectedExceptionMessage {"message":"type:fate error"}
      */
     public function testUploadFile() //{{{
     {
-        $fileClients       = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $fileClients = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
         $fileClients->type = 'fate';
         $fileClients->uploadFile();
     } //}}}
 
     /**
-     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedException        \KazuakiM\Bardiche\BardicheException
      * @expectedExceptionCode    0
      * @expectedExceptionMessage {"message":"type:fate error"}
      */
     public function testDownloadFile() //{{{
     {
-        $fileClients       = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $fileClients = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
         $fileClients->type = 'fate';
         $fileClients->DownloadFile();
     } //}}}
 
     public function testSetOptions() //{{{
     {
-        $fileClients   = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $fileClients = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
         $fileInfoArray = [
             'file_info' => [
                 [
                     'remote_directory_path' => '/',
-                    'remote_file_name'      => 'override_wait.txt',
-                    'local_directory_path'  => '/tmp',
-                    'local_file_name'       => 'override_wait.txt',
-                    'ascii'                 => FTP_ASCII,
+                    'remote_file_name' => 'override_wait.txt',
+                    'local_directory_path' => '/tmp',
+                    'local_file_name' => 'override_wait.txt',
+                    'ascii' => FTP_ASCII,
                 ],
             ],
         ];
@@ -127,14 +127,14 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
     public function testSetValue() //{{{
     {
         $fileClients = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
-        $timout      = 300;
+        $timout = 300;
         $fileClients->setValue('timeout', $timout);
         $this->successUploadFtpConfig['timeout'] = $timout;
         $this->assertArraySubset($fileClients->getConfig(), $this->successUploadFtpConfig);
     } //}}}
 
     /**
-     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedException        \KazuakiM\Bardiche\BardicheException
      * @expectedExceptionCode    0
      * @expectedExceptionMessage {"message":"file_exists error."}
      */
@@ -142,7 +142,7 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
     {
         $this->assertTrue(@file_exists('/tmp/sample_ftp_local.txt') ? @unlink('/tmp/sample_ftp_local.txt') : true, BardicheException::getMessageJson('Internal Server Error.unlink'));
 
-        $fileClients       = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
+        $fileClients = new FileClients(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig);
         $fileClientsConfig = $fileClients->getConfig();
         foreach ($fileClientsConfig['file_info'] as $fileInfoArray) {
             $fileClients->getUploadLocalFilePath($fileInfoArray);
@@ -150,19 +150,19 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
     } //}}}
 
     /**
-     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedException        \KazuakiM\Bardiche\BardicheException
      * @expectedExceptionCode    0
      * @expectedExceptionMessage {"message":"ftp_connect error."}
      */
     public function testAuthConnectionFtp() //{{{
     {
         $this->successUploadFtpConfig['negotiation'] = false;
-        $this->successUploadFtpConfig['port']        = '2222';
+        $this->successUploadFtpConfig['port'] = '2222';
         FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig, FileClients::BARDICHE_UPLOAD);
     } //}}}
 
     /**
-     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedException        \KazuakiM\Bardiche\BardicheException
      * @expectedExceptionCode    0
      * @expectedExceptionMessage {"message":"ftp_login error."}
      */
@@ -173,7 +173,7 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
     } //}}}
 
     /**
-     * @expectedException        KazuakiM\Bardiche\BardicheException
+     * @expectedException        \KazuakiM\Bardiche\BardicheException
      * @expectedExceptionCode    0
      * @expectedExceptionMessage {"message":"ftp_pasv error."}
      */
@@ -189,7 +189,7 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
         FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig, FileClients::BARDICHE_UPLOAD);
 
         foreach ($this->successUploadFtpConfig['file_info'] as $fileInfoArray) {
-            $localFilePath  = FileClients::getUploadLocalFilePath($fileInfoArray);
+            $localFilePath = FileClients::getUploadLocalFilePath($fileInfoArray);
             $remoteFilePath = FileClients::getRemoteFilePath($fileInfoArray);
 
             $this->assertFileExists(self::$_remoteFtpRootDirectory . $remoteFilePath, BardicheException::getMessageJson('Internal Server Error.assertFileExists'));
@@ -202,16 +202,16 @@ class FileClientsTest extends \PHPUnit_Framework_TestCase //{{{
         $this->successUploadFtpConfig['file_info'] = [
             [
                 'remote_directory_path' => '/',
-                'remote_file_name'      => 'sample_ftp_remote.txt',
-                'local_directory_path'  => '/tmp',
-                'local_file_name'       => 'sample_ftp_dl_local.txt',
-                'ascii'                 => FTP_ASCII,
+                'remote_file_name' => 'sample_ftp_remote.txt',
+                'local_directory_path' => '/tmp',
+                'local_file_name' => 'sample_ftp_dl_local.txt',
+                'ascii' => FTP_ASCII,
             ],
         ];
         FileClients::one(FileClientsType::BARDICHE_TYPE_FTP(), $this->successUploadFtpConfig, FileClients::BARDICHE_DOWNLOAD);
 
         foreach ($this->successUploadFtpConfig['file_info'] as $fileInfoArray) {
-            $localFilePath  = FileClients::getUploadLocalFilePath($fileInfoArray);
+            $localFilePath = FileClients::getUploadLocalFilePath($fileInfoArray);
             $remoteFilePath = FileClients::getRemoteFilePath($fileInfoArray);
 
             $this->assertFileExists(self::$_remoteFtpRootDirectory . $remoteFilePath, BardicheException::getMessageJson('Internal Server Error.assertFileExists'));

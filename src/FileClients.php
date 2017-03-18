@@ -9,65 +9,57 @@ namespace KazuakiM\Bardiche;
  *
  * @link      https://github.com/KazuakiM/bardiche
  */
-final class FileClientsType extends AbstractEnum //{{{
-{
-    const BARDICHE_TYPE_FTP  = 'ftp';
-    const BARDICHE_TYPE_FTPS = 'ftps';
-    const BARDICHE_TYPE_SFTP = 'sftp';
-    const BARDICHE_TYPE_SCP  = 'scp';
-} //}}}
-
 class FileClients //{{{
 {
     use Ftp;
     use Ssh;
 
     // Class variable {{{
-    const BARDICHE_UPLOAD   = true;
+    const BARDICHE_UPLOAD = true;
     const BARDICHE_DOWNLOAD = false;
     public $config;
     public $type;
     private static $_defaultCommonConfig = [
         'negotiation' => false,
-        'timeout'     => 90,
-        'host'        => '',
-        'username'    => '',
-        'password'    => '',
-        'file_info'   => [
+        'timeout' => 90,
+        'host' => '',
+        'username' => '',
+        'password' => '',
+        'file_info' => [
             [
                 'remote_directory_path' => '',
-                'remote_file_name'      => '',
-                'local_directory_path'  => '',
-                'local_file_name'       => '',
-                'ascii'                 => FTP_ASCII, // options: ftp and ftps only.
+                'remote_file_name' => '',
+                'local_directory_path' => '',
+                'local_file_name' => '',
+                'ascii' => FTP_ASCII, // options: ftp and ftps only.
             ],
         ],
     ];
     private static $_defaultConfig = [
         'ftp' => [
-            'port'     => 21,
-            'pasv'     => true,
+            'port' => 21,
+            'pasv' => true,
             'parallel' => 0,
         ],
         'ftps' => [
-            'port'     => 21,
-            'pasv'     => true,
+            'port' => 21,
+            'pasv' => true,
             'parallel' => 0,
         ],
         'sftp' => [
-            'port'        => 22,
-            'method'      => [],
-            'callbacks'   => [],
-            'pubkeyfile'  => '',
+            'port' => 22,
+            'method' => [],
+            'callbacks' => [],
+            'pubkeyfile' => '',
             'privkeyfile' => '',
         ],
         'scp' => [
-            'port'        => 22,
-            'method'      => [],
-            'callbacks'   => [],
-            'pubkeyfile'  => '',
+            'port' => 22,
+            'method' => [],
+            'callbacks' => [],
+            'pubkeyfile' => '',
             'privkeyfile' => '',
-            'permission'  => 0644,
+            'permission' => 0644,
         ],
     ];
     //}}}
@@ -92,7 +84,6 @@ class FileClients //{{{
         case FileClientsType::BARDICHE_TYPE_FTP:
         case FileClientsType::BARDICHE_TYPE_FTPS:
             break;
-
         case FileClientsType::BARDICHE_TYPE_SFTP:
         case FileClientsType::BARDICHE_TYPE_SCP:
             assert(extension_loaded('ssh2'), BardicheException::getMessageJson('Not found.ssh2'));

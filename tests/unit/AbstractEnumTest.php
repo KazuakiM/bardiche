@@ -9,10 +9,10 @@ namespace KazuakiM\Bardiche;
  *
  * @link      https://github.com/KazuakiM/bardiche
  */
-class AbstractEnumTest extends \PHPUnit_Framework_TestCase //{{{
+class AbstractEnumTest extends \PHPUnit\Framework\TestCase //{{{
 {
     /**
-     * @expectedException        InvalidArgumentException
+     * @expectedException        \InvalidArgumentException
      * @expectedExceptionCode    0
      * @expectedExceptionMessage argument:OK
      */
@@ -29,13 +29,13 @@ class AbstractEnumTest extends \PHPUnit_Framework_TestCase //{{{
     public function testValueOf() //{{{
     {
         $enumType = new EnumType(EnumType::ENUM_TYPE_OK);
-        $this->assertEquals(EnumType::ENUM_TYPE_OK, $enumType->valueOf(), BardicheException::getMessageJson('Internal Server Error.assertEquals'));
+        $this->assertSame(EnumType::ENUM_TYPE_OK, $enumType->valueOf(), BardicheException::getMessageJson('Internal Server Error.assertEquals'));
     } //}}}
 
     public function testToString() //{{{
     {
         $enumType = new EnumType(EnumType::ENUM_TYPE_OK);
-        $this->assertEquals(EnumType::ENUM_TYPE_OK, $enumType, BardicheException::getMessageJson('Internal Server Error.assertEquals'));
+        $this->assertSame(EnumType::ENUM_TYPE_OK, $enumType->__toString(), BardicheException::getMessageJson('Internal Server Error.assertEquals'));
     } //}}}
 } //}}}
 

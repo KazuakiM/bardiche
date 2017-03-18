@@ -1,5 +1,7 @@
 <?php
 
+namespace KazuakiM\Bardiche;
+
 /**
  * @copyright KazuakiM <kazuaki_mabuchi_to_go@hotmail.co.jp>
  * @author    KazuakiM <kazuaki_mabuchi_to_go@hotmail.co.jp>
@@ -7,4 +9,10 @@
  *
  * @link      https://github.com/KazuakiM/bardiche
  */
-require __DIR__ . '/../vendor/autoload.php';
+final class FileClientsType extends AbstractEnum //{{{
+{
+    const BARDICHE_TYPE_FTP = 'ftp';
+    const BARDICHE_TYPE_FTPS = 'ftps';
+    const BARDICHE_TYPE_SFTP = 'sftp';
+    const BARDICHE_TYPE_SCP = 'scp';
+} //}}}

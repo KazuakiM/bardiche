@@ -2,6 +2,7 @@ language: php
 
 php:
   - 7.0
+  - 7.1
 
 sudo: true
 
@@ -24,6 +25,7 @@ script:
   # php -r "phpinfo();"
   # cat $HOME/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer test
+  - composer csfixer
 
 after_success:
   - mkdir -p /tmp/build/coverage /tmp/build/document
