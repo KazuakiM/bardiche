@@ -7,7 +7,7 @@ namespace KazuakiM\Bardiche;
  * @author    KazuakiM <kazuaki_mabuchi_to_go@hotmail.co.jp>
  * @license   http://www.opensource.org/licenses/mit-license.php  MIT License
  *
- * @link      https://github.com/KazuakiM/bardiche
+ * @see      https://github.com/KazuakiM/bardiche
  */
 class FileClients //{{{
 {

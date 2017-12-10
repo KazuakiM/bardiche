@@ -7,7 +7,7 @@ namespace KazuakiM\Bardiche;
  * @author    KazuakiM <kazuaki_mabuchi_to_go@hotmail.co.jp>
  * @license   http://www.opensource.org/licenses/mit-license.php  MIT License
  *
- * @link      https://github.com/KazuakiM/bardiche
+ * @see      https://github.com/KazuakiM/bardiche
  */
 trait Ftp
 {
@@ -24,7 +24,7 @@ trait Ftp
         $connectionSize = ($countFileInfo < $this->config['parallel']) ? $countFileInfo : $this->config['parallel'];
         for ($index = 0; $index <= $connectionSize; ++$index) {
             //Connection
-            if ($this->type === FileClientsType::BARDICHE_TYPE_FTPS) {
+            if (FileClientsType::BARDICHE_TYPE_FTPS === $this->type) {
                 $this->_connectionArray[$index] = [
                     'resource' => ftp_ssl_connect($this->config['host'], $this->config['port'], $this->config['timeout']),
                     'status' => FTP_FINISHED,
@@ -56,7 +56,7 @@ trait Ftp
         while (true) {
             $endFlag = true;
             foreach ($this->_connectionArray as $key => $connection) {
-                if ($connection['status'] === FTP_MOREDATA) {
+                if (FTP_MOREDATA === $connection['status']) {
                     $this->_connectionArray[$key]['status'] = @ftp_nb_continue($connection['resource']);
                     $endFlag = false;
                     break;
@@ -78,7 +78,7 @@ trait Ftp
             while (true) {
                 $setFlag = true;
                 foreach ($this->_connectionArray as $key => $connection) {
-                    if ($connection['status'] !== FTP_MOREDATA) {
+                    if (FTP_MOREDATA !== $connection['status']) {
                         $this->_connectionArray[$key]['status'] = @ftp_nb_put($connection['resource'], ltrim(self::getRemoteFilePath($fileInfoArray), '/'), self::getUploadLocalFilePath($fileInfoArray), $fileInfoArray['ascii']);
                         $setFlag = true;
                         break;
@@ -104,7 +104,7 @@ trait Ftp
             while (true) {
                 $setFlag = true;
                 foreach ($this->_connectionArray as $key => $connection) {
-                    if ($connection['status'] !== FTP_MOREDATA) {
+                    if (FTP_MOREDATA !== $connection['status']) {
                         $this->_connectionArray[$key]['status'] = @ftp_nb_get($connection['resource'], self::getDownloadLocalFilePath($fileInfoArray), ltrim(self::getRemoteFilePath($fileInfoArray), '/'), $fileInfoArray['ascii']);
                         $setFlag = true;
                         break;
